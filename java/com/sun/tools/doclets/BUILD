@@ -1,4 +1,4 @@
-load("//java:rules.bzl", "java_apidoc")
+load("//java:rules.bzl", "javadoc")
 
 java_library(
     name = "doclets",
@@ -10,7 +10,7 @@ java_library(
     ],
 )
 
-java_apidoc(
+javadoc(
     name = "api",
     doclet = "com.sun.tools.doclets.standard.Standard",
     doclet_deps = [

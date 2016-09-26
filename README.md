@@ -15,4 +15,4 @@ language of your choice.
 
 | Language | Rule | Description |
 | :---     | ---: | :---------- |
-| [Java](java)     | [java_apidoc](java#java_apidoc) | Generate `javadoc` api documentation. |
+| [Java](java)     | [javadoc](java#javadoc) | Generate `javadoc` api documentation. |

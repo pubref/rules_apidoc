@@ -1,4 +1,4 @@
-load("//java:rules.bzl", "java_apidoc")
+load("//java:rules.bzl", "javadoc")
 
 filegroup(
     name = "srcs",
@@ -24,7 +24,7 @@ java_library(
     ],
 )
 
-java_apidoc(
+javadoc(
     name = "api",
     srcs = [
         "srcs",

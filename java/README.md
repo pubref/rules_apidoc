@@ -2,7 +2,7 @@
 
 | Rule | Description |
 | ---: | :--- |
-| [java_apidoc](#java_apidoc) | Generate `javadoc` HTML documentation. |
+| [javadoc](#javadoc) | Generate `javadoc` HTML documentation. |
 
 ## java\_apidoc
 
@@ -26,7 +26,7 @@ sourcefiles.
 
 The list of attributes for this rule is extensive but mirrors the
 `javadoc` command closely.  Please refer to the
-[source code](https://github.com/pubref/rules_apidoc/blob/master/apidoc/internal/java_apidoc.bzl)
+[source code](https://github.com/pubref/rules_apidoc/blob/master/apidoc/internal/javadoc.bzl)
 for definitive reference.
 
 ### Pattern 1: Using a set of source files via the `srcs` attribute
@@ -36,7 +36,7 @@ generates API documentation for a Taglet that links to the bazel
 documentation (as well as using *itself* as a custom taglet):
 
 ```python
-load("@org_pubref_rules_apidoc//java:rules.bzl", "java_apidoc")
+load("@org_pubref_rules_apidoc//java:rules.bzl", "javadoc")
 
 filegroup(
     name = "srcs",
@@ -54,7 +54,7 @@ java_library(
     deps = ["@org_pubref_rules_apidoc//java:tools_jar"],
 )
 
-java_apidoc(
+javadoc(
     name = "api",
     deps = [":bazel"],
     srcs = ["srcs"],
@@ -80,7 +80,7 @@ documentation for the Docklet API (as well as using *itself* as the
 custom doclet):
 
 ```python
-load("@org_pubref_rules_apidoc//java:rules.bzl", "java_apidoc")
+load("@org_pubref_rules_apidoc//java:rules.bzl", "javadoc")
 
 java_library(
     name = "doclets",
@@ -88,7 +88,7 @@ java_library(
     deps = ["@org_pubref_rules_apidoc//java:tools_jar"],
 )
 
-java_apidoc(
+javadoc(
     name = "api",
 
     deps = [":doclets"],

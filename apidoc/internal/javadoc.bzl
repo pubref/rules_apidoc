@@ -151,7 +151,7 @@ def _pathlist(files):
     return ":".join([file.path for file in files])
 
 
-def _java_apidoc_impl(ctx):
+def _javadoc_impl(ctx):
 
     #
     # Preparation of inputs and dependencies.
@@ -229,8 +229,8 @@ def _java_apidoc_impl(ctx):
         files = set([index_html]),
     )
 
-java_apidoc = rule(
-    implementation = _java_apidoc_impl,
+javadoc = rule(
+    implementation = _javadoc_impl,
     attrs = _mk_attrs(),
     output_to_genfiles = True,
 )

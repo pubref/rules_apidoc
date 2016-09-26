@@ -1,1 +1,1 @@
-load("//apidoc:internal/java_apidoc.bzl", "java_apidoc")
+load("//apidoc:internal/javadoc.bzl", "javadoc")
