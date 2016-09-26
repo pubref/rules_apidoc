@@ -4,7 +4,7 @@
 | ---: | :--- |
 | [javadoc](#javadoc) | Generate `javadoc` HTML documentation. |
 
-## java\_apidoc
+## javadoc
 
 Runs the `javadoc` command installed in the `@local_jdk//`.  To run
 this command, you'll want to generally provide either `deps + srcs` (pattern 1) or
