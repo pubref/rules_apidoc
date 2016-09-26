@@ -37,103 +37,103 @@ package com.sun.tools.doclets.internal.toolkit.util;
  */
 public class DocPaths {
 
-    /** The name of the file for all classes, using frames. */
-    public static final DocPath ALLCLASSES_FRAME = DocPath.create("allclasses-frame.html");
+  /** The name of the file for all classes, using frames. */
+  public static final DocPath ALLCLASSES_FRAME = DocPath.create("allclasses-frame.html");
 
-    /** The name of the file for all classes, without using frames. */
-    public static final DocPath ALLCLASSES_NOFRAME = DocPath.create("allclasses-noframe.html");
+  /** The name of the file for all classes, without using frames. */
+  public static final DocPath ALLCLASSES_NOFRAME = DocPath.create("allclasses-noframe.html");
 
-    /** The name of the sub-directory for storing class usage info. */
-    public static final DocPath CLASS_USE = DocPath.create("class-use");
+  /** The name of the sub-directory for storing class usage info. */
+  public static final DocPath CLASS_USE = DocPath.create("class-use");
 
-    /** The name of the file for constant values. */
-    public static final DocPath CONSTANT_VALUES = DocPath.create("constant-values.html");
+  /** The name of the file for constant values. */
+  public static final DocPath CONSTANT_VALUES = DocPath.create("constant-values.html");
 
-    /** The name of the fie for deprecated elements. */
-    public static final DocPath DEPRECATED_LIST = DocPath.create("deprecated-list.html");
+  /** The name of the fie for deprecated elements. */
+  public static final DocPath DEPRECATED_LIST = DocPath.create("deprecated-list.html");
 
-    /** The name of the subdirectory for user-provided additional documentation files. */
-    public static final DocPath DOC_FILES = DocPath.create("doc-files");
+  /** The name of the subdirectory for user-provided additional documentation files. */
+  public static final DocPath DOC_FILES = DocPath.create("doc-files");
 
-    /** The name of the file for help info. */
-    public static final DocPath HELP_DOC = DocPath.create("help-doc.html");
+  /** The name of the file for help info. */
+  public static final DocPath HELP_DOC = DocPath.create("help-doc.html");
 
-    /** The name of the main index file. */
-    public static final DocPath INDEX = DocPath.create("index.html");
+  /** The name of the main index file. */
+  public static final DocPath INDEX = DocPath.create("index.html");
 
-    /** The name of the single index file for all classes. */
-    public static final DocPath INDEX_ALL = DocPath.create("index-all.html");
+  /** The name of the single index file for all classes. */
+  public static final DocPath INDEX_ALL = DocPath.create("index-all.html");
 
-    /** The name of the directory for the split index files. */
-    public static final DocPath INDEX_FILES = DocPath.create("index-files");
+  /** The name of the directory for the split index files. */
+  public static final DocPath INDEX_FILES = DocPath.create("index-files");
 
-    /** Generate the name of one of the files in the split index. */
-    public static final DocPath indexN(int n) {
-        return DocPath.create("index-" + n + ".html");
-    }
+  /** Generate the name of one of the files in the split index. */
+  public static final DocPath indexN(int n) {
+    return DocPath.create("index-" + n + ".html");
+  }
 
-    /** The name of the default javascript file. */
-    public static final DocPath JAVASCRIPT = DocPath.create("script.js");
+  /** The name of the default javascript file. */
+  public static final DocPath JAVASCRIPT = DocPath.create("script.js");
 
-    /** The name of the file for the overview frame. */
-    public static final DocPath OVERVIEW_FRAME = DocPath.create("overview-frame.html");
+  /** The name of the file for the overview frame. */
+  public static final DocPath OVERVIEW_FRAME = DocPath.create("overview-frame.html");
 
-    /** The name of the file for the overview summary. */
-    public static final DocPath OVERVIEW_SUMMARY = DocPath.create("overview-summary.html");
+  /** The name of the file for the overview summary. */
+  public static final DocPath OVERVIEW_SUMMARY = DocPath.create("overview-summary.html");
 
-    /** The name of the file for the overview tree. */
-    public static final DocPath OVERVIEW_TREE = DocPath.create("overview-tree.html");
+  /** The name of the file for the overview tree. */
+  public static final DocPath OVERVIEW_TREE = DocPath.create("overview-tree.html");
 
-    /** The name of the file for the package frame. */
-    public static final DocPath PACKAGE_FRAME = DocPath.create("package-frame.html");
+  /** The name of the file for the package frame. */
+  public static final DocPath PACKAGE_FRAME = DocPath.create("package-frame.html");
 
-    /** The name of the file for the profile frame. */
-     public static final DocPath profileFrame(String profileName) {
-        return DocPath.create(profileName + "-frame.html");
-    }
+  /** The name of the file for the profile frame. */
+  public static final DocPath profileFrame(String profileName) {
+    return DocPath.create(profileName + "-frame.html");
+  }
 
-    /** The name of the file for the profile package frame. */
-     public static final DocPath profilePackageFrame(String profileName) {
-        return DocPath.create(profileName + "-package-frame.html");
-    }
+  /** The name of the file for the profile package frame. */
+  public static final DocPath profilePackageFrame(String profileName) {
+    return DocPath.create(profileName + "-package-frame.html");
+  }
 
-    /** The name of the file for the profile package summary. */
-     public static final DocPath profilePackageSummary(String profileName) {
-        return DocPath.create(profileName + "-package-summary.html");
-    }
+  /** The name of the file for the profile package summary. */
+  public static final DocPath profilePackageSummary(String profileName) {
+    return DocPath.create(profileName + "-package-summary.html");
+  }
 
-    /** The name of the file for the profile summary. */
-     public static final DocPath profileSummary(String profileName) {
-        return DocPath.create(profileName + "-summary.html");
-    }
+  /** The name of the file for the profile summary. */
+  public static final DocPath profileSummary(String profileName) {
+    return DocPath.create(profileName + "-summary.html");
+  }
 
-    /** The name of the file for the package list. */
-    public static final DocPath PACKAGE_LIST = DocPath.create("package-list");
+  /** The name of the file for the package list. */
+  public static final DocPath PACKAGE_LIST = DocPath.create("package-list");
 
-    /** The name of the file for the package summary. */
-    public static final DocPath PACKAGE_SUMMARY = DocPath.create("package-summary.html");
+  /** The name of the file for the package summary. */
+  public static final DocPath PACKAGE_SUMMARY = DocPath.create("package-summary.html");
 
-    /** The name of the file for the package tree. */
-    public static final DocPath PACKAGE_TREE = DocPath.create("package-tree.html");
+  /** The name of the file for the package tree. */
+  public static final DocPath PACKAGE_TREE = DocPath.create("package-tree.html");
 
-    /** The name of the file for the package usage info. */
-    public static final DocPath PACKAGE_USE = DocPath.create("package-use.html");
+  /** The name of the file for the package usage info. */
+  public static final DocPath PACKAGE_USE = DocPath.create("package-use.html");
 
-    /** The name of the file for the overview frame. */
-    public static final DocPath PROFILE_OVERVIEW_FRAME = DocPath.create("profile-overview-frame.html");
+  /** The name of the file for the overview frame. */
+  public static final DocPath PROFILE_OVERVIEW_FRAME =
+      DocPath.create("profile-overview-frame.html");
 
-    /** The name of the sub-package from which resources are read. */
-    public static final DocPath RESOURCES = DocPath.create("resources");
+  /** The name of the sub-package from which resources are read. */
+  public static final DocPath RESOURCES = DocPath.create("resources");
 
-    /** The name of the file for the serialized form info. */
-    public static final DocPath SERIALIZED_FORM = DocPath.create("serialized-form.html");
+  /** The name of the file for the serialized form info. */
+  public static final DocPath SERIALIZED_FORM = DocPath.create("serialized-form.html");
 
-    /** The name of the directory in which HTML versions of the source code
-     *  are generated.
-     */
-    public static final DocPath SOURCE_OUTPUT = DocPath.create("src-html");
+  /** The name of the directory in which HTML versions of the source code
+   *  are generated.
+   */
+  public static final DocPath SOURCE_OUTPUT = DocPath.create("src-html");
 
-    /** The name of the default stylesheet. */
-    public static final DocPath STYLESHEET = DocPath.create("stylesheet.css");
-
+  /** The name of the default stylesheet. */
+  public static final DocPath STYLESHEET = DocPath.create("stylesheet.css");
 }

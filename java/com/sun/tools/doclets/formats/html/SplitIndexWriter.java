@@ -47,135 +47,125 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class SplitIndexWriter extends AbstractIndexWriter {
 
-    /**
-     * Previous unicode character index in the built index.
-     */
-    protected int prev;
+  /**
+   * Previous unicode character index in the built index.
+   */
+  protected int prev;
 
-    /**
-     * Next unicode character in the built index.
-     */
-    protected int next;
+  /**
+   * Next unicode character in the built index.
+   */
+  protected int next;
 
-    /**
-     * Construct the SplitIndexWriter. Uses path to this file and relative path
-     * from this file.
-     *
-     * @param path       Path to the file which is getting generated.
-     * @param indexbuilder Unicode based Index from {@link IndexBuilder}
-     */
-    public SplitIndexWriter(ConfigurationImpl configuration,
-                            DocPath path,
-                            IndexBuilder indexbuilder,
-                            int prev, int next) throws IOException {
-        super(configuration, path, indexbuilder);
-        this.prev = prev;
-        this.next = next;
+  /**
+   * Construct the SplitIndexWriter. Uses path to this file and relative path
+   * from this file.
+   *
+   * @param path       Path to the file which is getting generated.
+   * @param indexbuilder Unicode based Index from {@link IndexBuilder}
+   */
+  public SplitIndexWriter(
+      ConfigurationImpl configuration, DocPath path, IndexBuilder indexbuilder, int prev, int next)
+      throws IOException {
+    super(configuration, path, indexbuilder);
+    this.prev = prev;
+    this.next = next;
+  }
+
+  /**
+   * Generate separate index files, for each Unicode character, listing all
+   * the members starting with the particular unicode character.
+   *
+   * @param indexbuilder IndexBuilder built by {@link IndexBuilder}
+   * @throws DocletAbortException
+   */
+  public static void generate(ConfigurationImpl configuration, IndexBuilder indexbuilder) {
+    SplitIndexWriter indexgen;
+    DocPath filename = DocPath.empty;
+    DocPath path = DocPaths.INDEX_FILES;
+    try {
+      for (int i = 0; i < indexbuilder.elements().length; i++) {
+        int j = i + 1;
+        int prev = (j == 1) ? -1 : i;
+        int next = (j == indexbuilder.elements().length) ? -1 : j + 1;
+        filename = DocPaths.indexN(j);
+        indexgen =
+            new SplitIndexWriter(configuration, path.resolve(filename), indexbuilder, prev, next);
+        indexgen.generateIndexFile((Character) indexbuilder.elements()[i]);
+        indexgen.close();
+      }
+    } catch (IOException exc) {
+      configuration.standardmessage.error(
+          "doclet.exception_encountered", exc.toString(), filename.getPath());
+      throw new DocletAbortException(exc);
     }
+  }
 
-    /**
-     * Generate separate index files, for each Unicode character, listing all
-     * the members starting with the particular unicode character.
-     *
-     * @param indexbuilder IndexBuilder built by {@link IndexBuilder}
-     * @throws DocletAbortException
-     */
-    public static void generate(ConfigurationImpl configuration,
-                                IndexBuilder indexbuilder) {
-        SplitIndexWriter indexgen;
-        DocPath filename = DocPath.empty;
-        DocPath path = DocPaths.INDEX_FILES;
-        try {
-            for (int i = 0; i < indexbuilder.elements().length; i++) {
-                int j = i + 1;
-                int prev = (j == 1)? -1: i;
-                int next = (j == indexbuilder.elements().length)? -1: j + 1;
-                filename = DocPaths.indexN(j);
-                indexgen = new SplitIndexWriter(configuration,
-                                                path.resolve(filename),
-                                                indexbuilder, prev, next);
-                indexgen.generateIndexFile((Character)indexbuilder.
-                                                                 elements()[i]);
-                indexgen.close();
-            }
-        } catch (IOException exc) {
-            configuration.standardmessage.error(
-                        "doclet.exception_encountered",
-                        exc.toString(), filename.getPath());
-            throw new DocletAbortException(exc);
-        }
-    }
+  /**
+   * Generate the contents of each index file, with Header, Footer,
+   * Member Field, Method and Constructor Description.
+   *
+   * @param unicode Unicode character referring to the character for the
+   * index.
+   */
+  protected void generateIndexFile(Character unicode) throws IOException {
+    String title = configuration.getText("doclet.Window_Split_Index", unicode.toString());
+    Content body = getBody(true, getWindowTitle(title));
+    addTop(body);
+    addNavLinks(true, body);
+    HtmlTree divTree = new HtmlTree(HtmlTag.DIV);
+    divTree.addStyle(HtmlStyle.contentContainer);
+    addLinksForIndexes(divTree);
+    addContents(unicode, indexbuilder.getMemberList(unicode), divTree);
+    addLinksForIndexes(divTree);
+    body.addContent(divTree);
+    addNavLinks(false, body);
+    addBottom(body);
+    printHtmlDocument(null, true, body);
+  }
 
-    /**
-     * Generate the contents of each index file, with Header, Footer,
-     * Member Field, Method and Constructor Description.
-     *
-     * @param unicode Unicode character referring to the character for the
-     * index.
-     */
-    protected void generateIndexFile(Character unicode) throws IOException {
-        String title = configuration.getText("doclet.Window_Split_Index",
-                unicode.toString());
-        Content body = getBody(true, getWindowTitle(title));
-        addTop(body);
-        addNavLinks(true, body);
-        HtmlTree divTree = new HtmlTree(HtmlTag.DIV);
-        divTree.addStyle(HtmlStyle.contentContainer);
-        addLinksForIndexes(divTree);
-        addContents(unicode, indexbuilder.getMemberList(unicode), divTree);
-        addLinksForIndexes(divTree);
-        body.addContent(divTree);
-        addNavLinks(false, body);
-        addBottom(body);
-        printHtmlDocument(null, true, body);
+  /**
+   * Add links for all the Index Files per unicode character.
+   *
+   * @param contentTree the content tree to which the links for indexes will be added
+   */
+  protected void addLinksForIndexes(Content contentTree) {
+    Object[] unicodeChars = indexbuilder.elements();
+    for (int i = 0; i < unicodeChars.length; i++) {
+      int j = i + 1;
+      contentTree.addContent(
+          getHyperLink(DocPaths.indexN(j), new StringContent(unicodeChars[i].toString())));
+      contentTree.addContent(getSpace());
     }
+  }
 
-    /**
-     * Add links for all the Index Files per unicode character.
-     *
-     * @param contentTree the content tree to which the links for indexes will be added
-     */
-    protected void addLinksForIndexes(Content contentTree) {
-        Object[] unicodeChars = indexbuilder.elements();
-        for (int i = 0; i < unicodeChars.length; i++) {
-            int j = i + 1;
-            contentTree.addContent(getHyperLink(DocPaths.indexN(j),
-                    new StringContent(unicodeChars[i].toString())));
-            contentTree.addContent(getSpace());
-        }
+  /**
+   * Get link to the previous unicode character.
+   *
+   * @return a content tree for the link
+   */
+  public Content getNavLinkPrevious() {
+    Content prevletterLabel = getResource("doclet.Prev_Letter");
+    if (prev == -1) {
+      return HtmlTree.LI(prevletterLabel);
+    } else {
+      Content prevLink = getHyperLink(DocPaths.indexN(prev), prevletterLabel);
+      return HtmlTree.LI(prevLink);
     }
+  }
 
-    /**
-     * Get link to the previous unicode character.
-     *
-     * @return a content tree for the link
-     */
-    public Content getNavLinkPrevious() {
-        Content prevletterLabel = getResource("doclet.Prev_Letter");
-        if (prev == -1) {
-            return HtmlTree.LI(prevletterLabel);
-        }
-        else {
-            Content prevLink = getHyperLink(DocPaths.indexN(prev),
-                    prevletterLabel);
-            return HtmlTree.LI(prevLink);
-        }
+  /**
+   * Get link to the next unicode character.
+   *
+   * @return a content tree for the link
+   */
+  public Content getNavLinkNext() {
+    Content nextletterLabel = getResource("doclet.Next_Letter");
+    if (next == -1) {
+      return HtmlTree.LI(nextletterLabel);
+    } else {
+      Content nextLink = getHyperLink(DocPaths.indexN(next), nextletterLabel);
+      return HtmlTree.LI(nextLink);
     }
-
-    /**
-     * Get link to the next unicode character.
-     *
-     * @return a content tree for the link
-     */
-    public Content getNavLinkNext() {
-        Content nextletterLabel = getResource("doclet.Next_Letter");
-        if (next == -1) {
-            return HtmlTree.LI(nextletterLabel);
-        }
-        else {
-            Content nextLink = getHyperLink(DocPaths.indexN(next),
-                    nextletterLabel);
-            return HtmlTree.LI(nextLink);
-        }
-    }
+  }
 }

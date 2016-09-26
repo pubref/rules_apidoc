@@ -39,23 +39,23 @@ package com.sun.tools.doclets.internal.toolkit.util;
  */
 public class DocletConstants {
 
-    /**
-     * The default amount of space between tab stops.
-     */
-    public static final int DEFAULT_TAB_STOP_LENGTH = 8;
+  /**
+   * The default amount of space between tab stops.
+   */
+  public static final int DEFAULT_TAB_STOP_LENGTH = 8;
 
-    /**
-     * The line separator for the current operating system.
-     */
-    public static final String NL = System.getProperty("line.separator");
+  /**
+   * The line separator for the current operating system.
+   */
+  public static final String NL = System.getProperty("line.separator");
 
-    /**
-     * The default package name.
-     */
-    public static final String DEFAULT_PACKAGE_NAME = "<Unnamed>";
+  /**
+   * The default package name.
+   */
+  public static final String DEFAULT_PACKAGE_NAME = "<Unnamed>";
 
-    /**
-     * The default package file name.
-     */
-    public static final String DEFAULT_PACKAGE_FILE_NAME = "default";
+  /**
+   * The default package file name.
+   */
+  public static final String DEFAULT_PACKAGE_FILE_NAME = "default";
 }

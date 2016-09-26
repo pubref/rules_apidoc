@@ -39,11 +39,10 @@ import java.io.*;
  * @author Bhavesh Patel (Modified)
  * @since 1.5
  */
-
 public interface NestedClassWriter {
 
-    /**
-     * Close the writer.
-     */
-    public void close() throws IOException;
+  /**
+   * Close the writer.
+   */
+  public void close() throws IOException;
 }

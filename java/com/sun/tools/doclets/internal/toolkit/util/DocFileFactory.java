@@ -46,55 +46,53 @@ import com.sun.tools.doclets.internal.toolkit.Configuration;
  * @since 1.8
  */
 abstract class DocFileFactory {
-    private static final Map<Configuration, DocFileFactory> factories =
-            new WeakHashMap<Configuration, DocFileFactory>();
+  private static final Map<Configuration, DocFileFactory> factories =
+      new WeakHashMap<Configuration, DocFileFactory>();
 
-    /**
-     * Get the appropriate factory, based on the file manager given in the
-     * configuration.
-     */
-    static synchronized DocFileFactory getFactory(Configuration configuration) {
-        DocFileFactory f = factories.get(configuration);
-        if (f == null) {
-            JavaFileManager fm = configuration.getFileManager();
-            if (fm instanceof StandardJavaFileManager)
-                f = new StandardDocFileFactory(configuration);
-            else {
-                try {
-                    Class<?> pathFileManagerClass =
-                            Class.forName("com.sun.tools.javac.nio.PathFileManager");
-                    if (pathFileManagerClass.isAssignableFrom(fm.getClass()))
-                        f = new PathDocFileFactory(configuration);
-                } catch (Throwable t) {
-                    throw new IllegalStateException(t);
-                }
-            }
-            factories.put(configuration, f);
+  /**
+   * Get the appropriate factory, based on the file manager given in the
+   * configuration.
+   */
+  static synchronized DocFileFactory getFactory(Configuration configuration) {
+    DocFileFactory f = factories.get(configuration);
+    if (f == null) {
+      JavaFileManager fm = configuration.getFileManager();
+      if (fm instanceof StandardJavaFileManager) f = new StandardDocFileFactory(configuration);
+      else {
+        try {
+          Class<?> pathFileManagerClass = Class.forName("com.sun.tools.javac.nio.PathFileManager");
+          if (pathFileManagerClass.isAssignableFrom(fm.getClass()))
+            f = new PathDocFileFactory(configuration);
+        } catch (Throwable t) {
+          throw new IllegalStateException(t);
         }
-        return f;
+      }
+      factories.put(configuration, f);
     }
+    return f;
+  }
 
-    protected Configuration configuration;
+  protected Configuration configuration;
 
-    protected DocFileFactory(Configuration configuration) {
-        this.configuration = configuration;
-    }
+  protected DocFileFactory(Configuration configuration) {
+    this.configuration = configuration;
+  }
 
-    /** Create a DocFile for a directory. */
-    abstract DocFile createFileForDirectory(String file);
+  /** Create a DocFile for a directory. */
+  abstract DocFile createFileForDirectory(String file);
 
-    /** Create a DocFile for a file that will be opened for reading. */
-    abstract DocFile createFileForInput(String file);
+  /** Create a DocFile for a file that will be opened for reading. */
+  abstract DocFile createFileForInput(String file);
 
-    /** Create a DocFile for a file that will be opened for writing. */
-    abstract DocFile createFileForOutput(DocPath path);
+  /** Create a DocFile for a file that will be opened for writing. */
+  abstract DocFile createFileForOutput(DocPath path);
 
-    /**
-     * List the directories and files found in subdirectories along the
-     * elements of the given location.
-     * @param location currently, only {@link StandardLocation#SOURCE_PATH} is supported.
-     * @param path the subdirectory of the directories of the location for which to
-     *  list files
-     */
-    abstract Iterable<DocFile> list(Location location, DocPath path);
+  /**
+   * List the directories and files found in subdirectories along the
+   * elements of the given location.
+   * @param location currently, only {@link StandardLocation#SOURCE_PATH} is supported.
+   * @param path the subdirectory of the directories of the location for which to
+   *  list files
+   */
+  abstract Iterable<DocFile> list(Location location, DocPath path);
 }

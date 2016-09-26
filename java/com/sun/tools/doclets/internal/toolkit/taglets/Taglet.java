@@ -59,100 +59,101 @@ import com.sun.tools.doclets.internal.toolkit.Content;
  * @since 1.4
  * @author Jamie Ho
  */
-
 public interface Taglet {
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in field documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in field documentation and false
-     * otherwise.
-     */
-    public abstract boolean inField();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in field documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in field documentation and false
+   * otherwise.
+   */
+  public abstract boolean inField();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in constructor documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in constructor documentation and false
-     * otherwise.
-     */
-    public abstract boolean inConstructor();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in constructor documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in constructor documentation and false
+   * otherwise.
+   */
+  public abstract boolean inConstructor();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in method documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in method documentation and false
-     * otherwise.
-     */
-    public abstract boolean inMethod();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in method documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in method documentation and false
+   * otherwise.
+   */
+  public abstract boolean inMethod();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in overview documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in method documentation and false
-     * otherwise.
-     */
-    public abstract boolean inOverview();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in overview documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in method documentation and false
+   * otherwise.
+   */
+  public abstract boolean inOverview();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in package documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in package documentation and false
-     * otherwise.
-     */
-    public abstract boolean inPackage();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in package documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in package documentation and false
+   * otherwise.
+   */
+  public abstract boolean inPackage();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in type documentation (classes or
-     * interfaces).
-     * @return true if this <code>Taglet</code>
-     * is used in type documentation and false
-     * otherwise.
-     */
-    public abstract boolean inType();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in type documentation (classes or
+   * interfaces).
+   * @return true if this <code>Taglet</code>
+   * is used in type documentation and false
+   * otherwise.
+   */
+  public abstract boolean inType();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is an inline tag. Return false otherwise.
-     * @return true if this <code>Taglet</code>
-     * is an inline tag and false otherwise.
-     */
-    public abstract boolean isInlineTag();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is an inline tag. Return false otherwise.
+   * @return true if this <code>Taglet</code>
+   * is an inline tag and false otherwise.
+   */
+  public abstract boolean isInlineTag();
 
-    /**
-     * Return the name of this custom tag.
-     * @return the name of this custom tag.
-     */
-    public abstract String getName();
+  /**
+   * Return the name of this custom tag.
+   * @return the name of this custom tag.
+   */
+  public abstract String getName();
 
-    /**
-     * Given the <code>Tag</code> representation of this custom
-     * tag, return its Content representation, which is output
-     * to the generated page.
-     * @param tag the <code>Tag</code> representation of this custom tag.
-     * @param writer a {@link TagletWriter} Taglet writer.
-     * @throws IllegalArgumentException thrown when the method is not supported by the taglet.
-     * @return the Content representation of this <code>Tag</code>.
-     */
-    public abstract Content getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException;
+  /**
+   * Given the <code>Tag</code> representation of this custom
+   * tag, return its Content representation, which is output
+   * to the generated page.
+   * @param tag the <code>Tag</code> representation of this custom tag.
+   * @param writer a {@link TagletWriter} Taglet writer.
+   * @throws IllegalArgumentException thrown when the method is not supported by the taglet.
+   * @return the Content representation of this <code>Tag</code>.
+   */
+  public abstract Content getTagletOutput(Tag tag, TagletWriter writer)
+      throws IllegalArgumentException;
 
-    /**
-     * Given a <code>Doc</code> object, check if it holds any tags of
-     * this type.  If it does, return the string representing the output.
-     * If it does not, return null.
-     * @param holder a {@link Doc} object holding the custom tag.
-     * @param writer a {@link TagletWriter} Taglet writer.
-     * @throws IllegalArgumentException thrown when the method is not supported by the taglet.
-     * @return the TagletOutput representation of this <code>Tag</code>.
-     */
-    public abstract Content getTagletOutput(Doc holder, TagletWriter writer) throws IllegalArgumentException;
+  /**
+   * Given a <code>Doc</code> object, check if it holds any tags of
+   * this type.  If it does, return the string representing the output.
+   * If it does not, return null.
+   * @param holder a {@link Doc} object holding the custom tag.
+   * @param writer a {@link TagletWriter} Taglet writer.
+   * @throws IllegalArgumentException thrown when the method is not supported by the taglet.
+   * @return the TagletOutput representation of this <code>Tag</code>.
+   */
+  public abstract Content getTagletOutput(Doc holder, TagletWriter writer)
+      throws IllegalArgumentException;
 
-    @Override
-    public abstract String toString();
+  @Override
+  public abstract String toString();
 }

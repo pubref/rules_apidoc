@@ -49,219 +49,213 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class PackageIndexWriter extends AbstractPackageIndexWriter {
 
-    /**
-     * Root of the program structure. Used for "overview" documentation.
-     */
-    private RootDoc root;
+  /**
+   * Root of the program structure. Used for "overview" documentation.
+   */
+  private RootDoc root;
 
-    /**
-     * Map representing the group of packages as specified on the command line.
-     *
-     * @see Group
-     */
-    private Map<String,List<PackageDoc>> groupPackageMap;
+  /**
+   * Map representing the group of packages as specified on the command line.
+   *
+   * @see Group
+   */
+  private Map<String, List<PackageDoc>> groupPackageMap;
 
-    /**
-     * List to store the order groups as specified on the command line.
-     */
-    private List<String> groupList;
+  /**
+   * List to store the order groups as specified on the command line.
+   */
+  private List<String> groupList;
 
-    /**
-     * Construct the PackageIndexWriter. Also constructs the grouping
-     * information as provided on the command line by "-group" option. Stores
-     * the order of groups specified by the user.
-     *
-     * @see Group
-     */
-    public PackageIndexWriter(ConfigurationImpl configuration,
-                              DocPath filename)
-                       throws IOException {
-        super(configuration, filename);
-        this.root = configuration.root;
-        groupPackageMap = configuration.group.groupPackages(packages);
-        groupList = configuration.group.getGroupList();
+  /**
+   * Construct the PackageIndexWriter. Also constructs the grouping
+   * information as provided on the command line by "-group" option. Stores
+   * the order of groups specified by the user.
+   *
+   * @see Group
+   */
+  public PackageIndexWriter(ConfigurationImpl configuration, DocPath filename) throws IOException {
+    super(configuration, filename);
+    this.root = configuration.root;
+    groupPackageMap = configuration.group.groupPackages(packages);
+    groupList = configuration.group.getGroupList();
+  }
+
+  /**
+   * Generate the package index page for the right-hand frame.
+   *
+   * @param configuration the current configuration of the doclet.
+   */
+  public static void generate(ConfigurationImpl configuration) {
+    PackageIndexWriter packgen;
+    DocPath filename = DocPaths.OVERVIEW_SUMMARY;
+    try {
+      packgen = new PackageIndexWriter(configuration, filename);
+      packgen.buildPackageIndexFile("doclet.Window_Overview_Summary", true);
+      packgen.close();
+    } catch (IOException exc) {
+      configuration.standardmessage.error("doclet.exception_encountered", exc.toString(), filename);
+      throw new DocletAbortException(exc);
     }
+  }
 
-    /**
-     * Generate the package index page for the right-hand frame.
-     *
-     * @param configuration the current configuration of the doclet.
-     */
-    public static void generate(ConfigurationImpl configuration) {
-        PackageIndexWriter packgen;
-        DocPath filename = DocPaths.OVERVIEW_SUMMARY;
-        try {
-            packgen = new PackageIndexWriter(configuration, filename);
-            packgen.buildPackageIndexFile("doclet.Window_Overview_Summary", true);
-            packgen.close();
-        } catch (IOException exc) {
-            configuration.standardmessage.error(
-                        "doclet.exception_encountered",
-                        exc.toString(), filename);
-            throw new DocletAbortException(exc);
-        }
+  /**
+   * Depending upon the grouping information and their titles, add
+   * separate table indices for each package group.
+   *
+   * @param body the documentation tree to which the index will be added
+   */
+  protected void addIndex(Content body) {
+    for (int i = 0; i < groupList.size(); i++) {
+      String groupname = groupList.get(i);
+      List<PackageDoc> list = groupPackageMap.get(groupname);
+      if (list != null && list.size() > 0) {
+        addIndexContents(
+            list.toArray(new PackageDoc[list.size()]),
+            groupname,
+            configuration.getText(
+                "doclet.Member_Table_Summary", groupname, configuration.getText("doclet.packages")),
+            body);
+      }
     }
+  }
 
-    /**
-     * Depending upon the grouping information and their titles, add
-     * separate table indices for each package group.
-     *
-     * @param body the documentation tree to which the index will be added
-     */
-    protected void addIndex(Content body) {
-        for (int i = 0; i < groupList.size(); i++) {
-        String groupname = groupList.get(i);
-        List<PackageDoc> list = groupPackageMap.get(groupname);
-            if (list != null && list.size() > 0) {
-                addIndexContents(list.toArray(new PackageDoc[list.size()]),
-                        groupname, configuration.getText("doclet.Member_Table_Summary",
-                        groupname, configuration.getText("doclet.packages")), body);
-            }
-        }
+  /**
+   * {@inheritDoc}
+   */
+  protected void addProfilesList(Content profileSummary, Content body) {
+    Content h2 = HtmlTree.HEADING(HtmlTag.H2, profileSummary);
+    Content profilesDiv = HtmlTree.DIV(h2);
+    Content ul = new HtmlTree(HtmlTag.UL);
+    String profileName;
+    for (int i = 1; i < configuration.profiles.getProfileCount(); i++) {
+      profileName = Profile.lookup(i).name;
+      // If the profile has valid packages to be documented, add it to the
+      // profiles list on overview-summary.html page.
+      if (configuration.shouldDocumentProfile(profileName)) {
+        Content profileLinkContent =
+            getTargetProfileLink("classFrame", new StringContent(profileName), profileName);
+        Content li = HtmlTree.LI(profileLinkContent);
+        ul.addContent(li);
+      }
     }
+    profilesDiv.addContent(ul);
+    Content div = HtmlTree.DIV(HtmlStyle.contentContainer, profilesDiv);
+    body.addContent(div);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected void addProfilesList(Content profileSummary, Content body) {
-        Content h2 = HtmlTree.HEADING(HtmlTag.H2, profileSummary);
-        Content profilesDiv = HtmlTree.DIV(h2);
-        Content ul = new HtmlTree(HtmlTag.UL);
-        String profileName;
-        for (int i = 1; i < configuration.profiles.getProfileCount(); i++) {
-            profileName = Profile.lookup(i).name;
-            // If the profile has valid packages to be documented, add it to the
-            // profiles list on overview-summary.html page.
-            if (configuration.shouldDocumentProfile(profileName)) {
-                Content profileLinkContent = getTargetProfileLink("classFrame",
-                        new StringContent(profileName), profileName);
-                Content li = HtmlTree.LI(profileLinkContent);
-                ul.addContent(li);
-            }
-        }
-        profilesDiv.addContent(ul);
-        Content div = HtmlTree.DIV(HtmlStyle.contentContainer, profilesDiv);
-        body.addContent(div);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  protected void addPackagesList(
+      PackageDoc[] packages, String text, String tableSummary, Content body) {
+    Content table =
+        HtmlTree.TABLE(
+            HtmlStyle.overviewSummary, 0, 3, 0, tableSummary, getTableCaption(new RawHtml(text)));
+    table.addContent(getSummaryTableHeader(packageTableHeader, "col"));
+    Content tbody = new HtmlTree(HtmlTag.TBODY);
+    addPackagesList(packages, tbody);
+    table.addContent(tbody);
+    Content div = HtmlTree.DIV(HtmlStyle.contentContainer, table);
+    body.addContent(div);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected void addPackagesList(PackageDoc[] packages, String text,
-            String tableSummary, Content body) {
-        Content table = HtmlTree.TABLE(HtmlStyle.overviewSummary, 0, 3, 0, tableSummary,
-                getTableCaption(new RawHtml(text)));
-        table.addContent(getSummaryTableHeader(packageTableHeader, "col"));
-        Content tbody = new HtmlTree(HtmlTag.TBODY);
-        addPackagesList(packages, tbody);
-        table.addContent(tbody);
-        Content div = HtmlTree.DIV(HtmlStyle.contentContainer, table);
-        body.addContent(div);
+  /**
+   * Adds list of packages in the index table. Generate link to each package.
+   *
+   * @param packages Packages to which link is to be generated
+   * @param tbody the documentation tree to which the list will be added
+   */
+  protected void addPackagesList(PackageDoc[] packages, Content tbody) {
+    for (int i = 0; i < packages.length; i++) {
+      if (packages[i] != null && packages[i].name().length() > 0) {
+        if (configuration.nodeprecated && Util.isDeprecated(packages[i])) continue;
+        Content packageLinkContent = getPackageLink(packages[i], getPackageName(packages[i]));
+        Content tdPackage = HtmlTree.TD(HtmlStyle.colFirst, packageLinkContent);
+        HtmlTree tdSummary = new HtmlTree(HtmlTag.TD);
+        tdSummary.addStyle(HtmlStyle.colLast);
+        addSummaryComment(packages[i], tdSummary);
+        HtmlTree tr = HtmlTree.TR(tdPackage);
+        tr.addContent(tdSummary);
+        if (i % 2 == 0) tr.addStyle(HtmlStyle.altColor);
+        else tr.addStyle(HtmlStyle.rowColor);
+        tbody.addContent(tr);
+      }
     }
+  }
 
-    /**
-     * Adds list of packages in the index table. Generate link to each package.
-     *
-     * @param packages Packages to which link is to be generated
-     * @param tbody the documentation tree to which the list will be added
-     */
-    protected void addPackagesList(PackageDoc[] packages, Content tbody) {
-        for (int i = 0; i < packages.length; i++) {
-            if (packages[i] != null && packages[i].name().length() > 0) {
-                if (configuration.nodeprecated && Util.isDeprecated(packages[i]))
-                    continue;
-                Content packageLinkContent = getPackageLink(packages[i],
-                        getPackageName(packages[i]));
-                Content tdPackage = HtmlTree.TD(HtmlStyle.colFirst, packageLinkContent);
-                HtmlTree tdSummary = new HtmlTree(HtmlTag.TD);
-                tdSummary.addStyle(HtmlStyle.colLast);
-                addSummaryComment(packages[i], tdSummary);
-                HtmlTree tr = HtmlTree.TR(tdPackage);
-                tr.addContent(tdSummary);
-                if (i%2 == 0)
-                    tr.addStyle(HtmlStyle.altColor);
-                else
-                    tr.addStyle(HtmlStyle.rowColor);
-                tbody.addContent(tr);
-            }
-        }
+  /**
+   * Adds the overview summary comment for this documentation. Add one line
+   * summary at the top of the page and generate a link to the description,
+   * which is added at the end of this page.
+   *
+   * @param body the documentation tree to which the overview header will be added
+   */
+  protected void addOverviewHeader(Content body) {
+    if (root.inlineTags().length > 0) {
+      HtmlTree subTitleDiv = new HtmlTree(HtmlTag.DIV);
+      subTitleDiv.addStyle(HtmlStyle.subTitle);
+      addSummaryComment(root, subTitleDiv);
+      Content div = HtmlTree.DIV(HtmlStyle.header, subTitleDiv);
+      Content see = seeLabel;
+      see.addContent(" ");
+      Content descPara = HtmlTree.P(see);
+      Content descLink =
+          getHyperLink(getDocLink(SectionName.OVERVIEW_DESCRIPTION), descriptionLabel, "", "");
+      descPara.addContent(descLink);
+      div.addContent(descPara);
+      body.addContent(div);
     }
+  }
 
-    /**
-     * Adds the overview summary comment for this documentation. Add one line
-     * summary at the top of the page and generate a link to the description,
-     * which is added at the end of this page.
-     *
-     * @param body the documentation tree to which the overview header will be added
-     */
-    protected void addOverviewHeader(Content body) {
-        if (root.inlineTags().length > 0) {
-            HtmlTree subTitleDiv = new HtmlTree(HtmlTag.DIV);
-            subTitleDiv.addStyle(HtmlStyle.subTitle);
-            addSummaryComment(root, subTitleDiv);
-            Content div = HtmlTree.DIV(HtmlStyle.header, subTitleDiv);
-            Content see = seeLabel;
-            see.addContent(" ");
-            Content descPara = HtmlTree.P(see);
-            Content descLink = getHyperLink(getDocLink(
-                    SectionName.OVERVIEW_DESCRIPTION),
-                    descriptionLabel, "", "");
-            descPara.addContent(descLink);
-            div.addContent(descPara);
-            body.addContent(div);
-        }
+  /**
+   * Adds the overview comment as provided in the file specified by the
+   * "-overview" option on the command line.
+   *
+   * @param htmltree the documentation tree to which the overview comment will
+   *                 be added
+   */
+  protected void addOverviewComment(Content htmltree) {
+    if (root.inlineTags().length > 0) {
+      htmltree.addContent(getMarkerAnchor(SectionName.OVERVIEW_DESCRIPTION));
+      addInlineComment(root, htmltree);
     }
+  }
 
-    /**
-     * Adds the overview comment as provided in the file specified by the
-     * "-overview" option on the command line.
-     *
-     * @param htmltree the documentation tree to which the overview comment will
-     *                 be added
-     */
-    protected void addOverviewComment(Content htmltree) {
-        if (root.inlineTags().length > 0) {
-            htmltree.addContent(
-                    getMarkerAnchor(SectionName.OVERVIEW_DESCRIPTION));
-            addInlineComment(root, htmltree);
-        }
-    }
+  /**
+   * Adds the tag information as provided in the file specified by the
+   * "-overview" option on the command line.
+   *
+   * @param body the documentation tree to which the overview will be added
+   */
+  protected void addOverview(Content body) throws IOException {
+    HtmlTree div = new HtmlTree(HtmlTag.DIV);
+    div.addStyle(HtmlStyle.contentContainer);
+    addOverviewComment(div);
+    addTagsInfo(root, div);
+    body.addContent(div);
+  }
 
-    /**
-     * Adds the tag information as provided in the file specified by the
-     * "-overview" option on the command line.
-     *
-     * @param body the documentation tree to which the overview will be added
-     */
-    protected void addOverview(Content body) throws IOException {
-        HtmlTree div = new HtmlTree(HtmlTag.DIV);
-        div.addStyle(HtmlStyle.contentContainer);
-        addOverviewComment(div);
-        addTagsInfo(root, div);
-        body.addContent(div);
-    }
+  /**
+   * Adds the top text (from the -top option), the upper
+   * navigation bar, and then the title (from the"-title"
+   * option), at the top of page.
+   *
+   * @body the documentation tree to which the navigation bar header will be added
+   */
+  protected void addNavigationBarHeader(Content body) {
+    addTop(body);
+    addNavLinks(true, body);
+    addConfigurationTitle(body);
+  }
 
-    /**
-     * Adds the top text (from the -top option), the upper
-     * navigation bar, and then the title (from the"-title"
-     * option), at the top of page.
-     *
-     * @body the documentation tree to which the navigation bar header will be added
-     */
-    protected void addNavigationBarHeader(Content body) {
-        addTop(body);
-        addNavLinks(true, body);
-        addConfigurationTitle(body);
-    }
-
-    /**
-     * Adds the lower navigation bar and the bottom text
-     * (from the -bottom option) at the bottom of page.
-     *
-     * @param body the documentation tree to which the navigation bar footer will be added
-     */
-    protected void addNavigationBarFooter(Content body) {
-        addNavLinks(false, body);
-        addBottom(body);
-    }
+  /**
+   * Adds the lower navigation bar and the bottom text
+   * (from the -bottom option) at the bottom of page.
+   *
+   * @param body the documentation tree to which the navigation bar footer will be added
+   */
+  protected void addNavigationBarFooter(Content body) {
+    addNavLinks(false, body);
+    addBottom(body);
+  }
 }

@@ -42,26 +42,24 @@ import com.sun.tools.doclets.internal.toolkit.Content;
  * @author Doug Kramer
  * @since 1.4
  */
-
 public class DocRootTaglet extends BaseInlineTaglet {
 
+  /**
+   * Construct a new DocRootTaglet.
+   */
+  public DocRootTaglet() {
+    name = "docRoot";
+  }
 
-    /**
-     * Construct a new DocRootTaglet.
-     */
-    public DocRootTaglet() {
-        name = "docRoot";
-    }
-
-    /**
-     * Given a <code>Doc</code> object, check if it holds any tags of
-     * this type.  If it does, return the string representing the output.
-     * If it does not, return null.
-     * @param tag a tag representing the custom tag.
-     * @param writer a {@link TagletWriter} Taglet writer.
-     * @return the string representation of this <code>Tag</code>.
-     */
-    public Content getTagletOutput(Tag tag, TagletWriter writer) {
-        return writer.getDocRootOutput();
-    }
+  /**
+   * Given a <code>Doc</code> object, check if it holds any tags of
+   * this type.  If it does, return the string representing the output.
+   * If it does not, return null.
+   * @param tag a tag representing the custom tag.
+   * @param writer a {@link TagletWriter} Taglet writer.
+   * @return the string representation of this <code>Tag</code>.
+   */
+  public Content getTagletOutput(Tag tag, TagletWriter writer) {
+    return writer.getDocRootOutput();
+  }
 }

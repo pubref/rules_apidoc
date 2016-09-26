@@ -47,187 +47,199 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  *
  * @author Bhavesh Patel
  */
-public class ProfileWriterImpl extends HtmlDocletWriter
-    implements ProfileSummaryWriter {
+public class ProfileWriterImpl extends HtmlDocletWriter implements ProfileSummaryWriter {
 
-    /**
-     * The prev profile name in the alpha-order list.
-     */
-    protected Profile prevProfile;
+  /**
+   * The prev profile name in the alpha-order list.
+   */
+  protected Profile prevProfile;
 
-    /**
-     * The next profile name in the alpha-order list.
-     */
-    protected Profile nextProfile;
+  /**
+   * The next profile name in the alpha-order list.
+   */
+  protected Profile nextProfile;
 
-    /**
-     * The profile being documented.
-     */
-    protected Profile profile;
+  /**
+   * The profile being documented.
+   */
+  protected Profile profile;
 
-    /**
-     * Constructor to construct ProfileWriter object and to generate
-     * "profileName-summary.html" file.
-     *
-     * @param configuration the configuration of the doclet.
-     * @param profile       Profile under consideration.
-     * @param prevProfile   Previous profile in the sorted array.
-     * @param nextProfile   Next profile in the sorted array.
-     */
-    public ProfileWriterImpl(ConfigurationImpl configuration,
-            Profile profile, Profile prevProfile, Profile nextProfile)
-            throws IOException {
-        super(configuration, DocPaths.profileSummary(profile.name));
-        this.prevProfile = prevProfile;
-        this.nextProfile = nextProfile;
-        this.profile = profile;
-    }
+  /**
+   * Constructor to construct ProfileWriter object and to generate
+   * "profileName-summary.html" file.
+   *
+   * @param configuration the configuration of the doclet.
+   * @param profile       Profile under consideration.
+   * @param prevProfile   Previous profile in the sorted array.
+   * @param nextProfile   Next profile in the sorted array.
+   */
+  public ProfileWriterImpl(
+      ConfigurationImpl configuration, Profile profile, Profile prevProfile, Profile nextProfile)
+      throws IOException {
+    super(configuration, DocPaths.profileSummary(profile.name));
+    this.prevProfile = prevProfile;
+    this.nextProfile = nextProfile;
+    this.profile = profile;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getProfileHeader(String heading) {
-        String profileName = profile.name;
-        Content bodyTree = getBody(true, getWindowTitle(profileName));
-        addTop(bodyTree);
-        addNavLinks(true, bodyTree);
-        HtmlTree div = new HtmlTree(HtmlTag.DIV);
-        div.addStyle(HtmlStyle.header);
-        Content tHeading = HtmlTree.HEADING(HtmlConstants.TITLE_HEADING, true,
-                HtmlStyle.title, profileLabel);
-        tHeading.addContent(getSpace());
-        Content profileHead = new RawHtml(heading);
-        tHeading.addContent(profileHead);
-        div.addContent(tHeading);
-        bodyTree.addContent(div);
-        return bodyTree;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getProfileHeader(String heading) {
+    String profileName = profile.name;
+    Content bodyTree = getBody(true, getWindowTitle(profileName));
+    addTop(bodyTree);
+    addNavLinks(true, bodyTree);
+    HtmlTree div = new HtmlTree(HtmlTag.DIV);
+    div.addStyle(HtmlStyle.header);
+    Content tHeading =
+        HtmlTree.HEADING(HtmlConstants.TITLE_HEADING, true, HtmlStyle.title, profileLabel);
+    tHeading.addContent(getSpace());
+    Content profileHead = new RawHtml(heading);
+    tHeading.addContent(profileHead);
+    div.addContent(tHeading);
+    bodyTree.addContent(div);
+    return bodyTree;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getContentHeader() {
-        HtmlTree div = new HtmlTree(HtmlTag.DIV);
-        div.addStyle(HtmlStyle.contentContainer);
-        return div;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getContentHeader() {
+    HtmlTree div = new HtmlTree(HtmlTag.DIV);
+    div.addStyle(HtmlStyle.contentContainer);
+    return div;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getSummaryHeader() {
-        HtmlTree li = new HtmlTree(HtmlTag.LI);
-        li.addStyle(HtmlStyle.blockList);
-        return li;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getSummaryHeader() {
+    HtmlTree li = new HtmlTree(HtmlTag.LI);
+    li.addStyle(HtmlStyle.blockList);
+    return li;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getSummaryTree(Content summaryContentTree) {
-        HtmlTree ul = HtmlTree.UL(HtmlStyle.blockList, summaryContentTree);
-        HtmlTree div = HtmlTree.DIV(HtmlStyle.summary, ul);
-        return div;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getSummaryTree(Content summaryContentTree) {
+    HtmlTree ul = HtmlTree.UL(HtmlStyle.blockList, summaryContentTree);
+    HtmlTree div = HtmlTree.DIV(HtmlStyle.summary, ul);
+    return div;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getPackageSummaryHeader(PackageDoc pkg) {
-        Content pkgName = getTargetProfilePackageLink(pkg,
-                    "classFrame", new StringContent(pkg.name()), profile.name);
-        Content heading = HtmlTree.HEADING(HtmlTag.H3, pkgName);
-        HtmlTree li = HtmlTree.LI(HtmlStyle.blockList, heading);
-        addPackageDeprecationInfo(li, pkg);
-        return li;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getPackageSummaryHeader(PackageDoc pkg) {
+    Content pkgName =
+        getTargetProfilePackageLink(pkg, "classFrame", new StringContent(pkg.name()), profile.name);
+    Content heading = HtmlTree.HEADING(HtmlTag.H3, pkgName);
+    HtmlTree li = HtmlTree.LI(HtmlStyle.blockList, heading);
+    addPackageDeprecationInfo(li, pkg);
+    return li;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getPackageSummaryTree(Content packageSummaryContentTree) {
-        HtmlTree ul = HtmlTree.UL(HtmlStyle.blockList, packageSummaryContentTree);
-        return ul;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getPackageSummaryTree(Content packageSummaryContentTree) {
+    HtmlTree ul = HtmlTree.UL(HtmlStyle.blockList, packageSummaryContentTree);
+    return ul;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void addClassesSummary(ClassDoc[] classes, String label,
-            String tableSummary, String[] tableHeader, Content packageSummaryContentTree) {
-        addClassesSummary(classes, label, tableSummary, tableHeader,
-                packageSummaryContentTree, profile.value);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public void addClassesSummary(
+      ClassDoc[] classes,
+      String label,
+      String tableSummary,
+      String[] tableHeader,
+      Content packageSummaryContentTree) {
+    addClassesSummary(
+        classes, label, tableSummary, tableHeader, packageSummaryContentTree, profile.value);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void addProfileFooter(Content contentTree) {
-        addNavLinks(false, contentTree);
-        addBottom(contentTree);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public void addProfileFooter(Content contentTree) {
+    addNavLinks(false, contentTree);
+    addBottom(contentTree);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void printDocument(Content contentTree) throws IOException {
-        printHtmlDocument(configuration.metakeywords.getMetaKeywords(profile),
-                true, contentTree);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public void printDocument(Content contentTree) throws IOException {
+    printHtmlDocument(configuration.metakeywords.getMetaKeywords(profile), true, contentTree);
+  }
 
-    /**
-     * Add the profile package deprecation information to the documentation tree.
-     *
-     * @param li the content tree to which the deprecation information will be added
-     * @param pkg the PackageDoc that is added
-     */
-    public void addPackageDeprecationInfo(Content li, PackageDoc pkg) {
-        Tag[] deprs;
-        if (Util.isDeprecated(pkg)) {
-            deprs = pkg.tags("deprecated");
-            HtmlTree deprDiv = new HtmlTree(HtmlTag.DIV);
-            deprDiv.addStyle(HtmlStyle.deprecatedContent);
-            Content deprPhrase = HtmlTree.SPAN(HtmlStyle.deprecatedLabel, deprecatedPhrase);
-            deprDiv.addContent(deprPhrase);
-            if (deprs.length > 0) {
-                Tag[] commentTags = deprs[0].inlineTags();
-                if (commentTags.length > 0) {
-                    addInlineDeprecatedComment(pkg, deprs[0], deprDiv);
-                }
-            }
-            li.addContent(deprDiv);
+  /**
+   * Add the profile package deprecation information to the documentation tree.
+   *
+   * @param li the content tree to which the deprecation information will be added
+   * @param pkg the PackageDoc that is added
+   */
+  public void addPackageDeprecationInfo(Content li, PackageDoc pkg) {
+    Tag[] deprs;
+    if (Util.isDeprecated(pkg)) {
+      deprs = pkg.tags("deprecated");
+      HtmlTree deprDiv = new HtmlTree(HtmlTag.DIV);
+      deprDiv.addStyle(HtmlStyle.deprecatedContent);
+      Content deprPhrase = HtmlTree.SPAN(HtmlStyle.deprecatedLabel, deprecatedPhrase);
+      deprDiv.addContent(deprPhrase);
+      if (deprs.length > 0) {
+        Tag[] commentTags = deprs[0].inlineTags();
+        if (commentTags.length > 0) {
+          addInlineDeprecatedComment(pkg, deprs[0], deprDiv);
         }
+      }
+      li.addContent(deprDiv);
     }
+  }
 
-    /**
-     * Get "PREV PROFILE" link in the navigation bar.
-     *
-     * @return a content tree for the previous link
-     */
-    public Content getNavLinkPrevious() {
-        Content li;
-        if (prevProfile == null) {
-            li = HtmlTree.LI(prevprofileLabel);
-        } else {
-            li = HtmlTree.LI(getHyperLink(pathToRoot.resolve(DocPaths.profileSummary(
-                    prevProfile.name)), prevprofileLabel, "", ""));
-        }
-        return li;
+  /**
+   * Get "PREV PROFILE" link in the navigation bar.
+   *
+   * @return a content tree for the previous link
+   */
+  public Content getNavLinkPrevious() {
+    Content li;
+    if (prevProfile == null) {
+      li = HtmlTree.LI(prevprofileLabel);
+    } else {
+      li =
+          HtmlTree.LI(
+              getHyperLink(
+                  pathToRoot.resolve(DocPaths.profileSummary(prevProfile.name)),
+                  prevprofileLabel,
+                  "",
+                  ""));
     }
+    return li;
+  }
 
-    /**
-     * Get "NEXT PROFILE" link in the navigation bar.
-     *
-     * @return a content tree for the next link
-     */
-    public Content getNavLinkNext() {
-        Content li;
-        if (nextProfile == null) {
-            li = HtmlTree.LI(nextprofileLabel);
-        } else {
-            li = HtmlTree.LI(getHyperLink(pathToRoot.resolve(DocPaths.profileSummary(
-                    nextProfile.name)), nextprofileLabel, "", ""));
-        }
-        return li;
+  /**
+   * Get "NEXT PROFILE" link in the navigation bar.
+   *
+   * @return a content tree for the next link
+   */
+  public Content getNavLinkNext() {
+    Content li;
+    if (nextProfile == null) {
+      li = HtmlTree.LI(nextprofileLabel);
+    } else {
+      li =
+          HtmlTree.LI(
+              getHyperLink(
+                  pathToRoot.resolve(DocPaths.profileSummary(nextProfile.name)),
+                  nextprofileLabel,
+                  "",
+                  ""));
     }
+    return li;
+  }
 }

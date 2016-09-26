@@ -43,118 +43,122 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class RawHtml extends Content {
 
-    private String rawHtmlContent;
+  private String rawHtmlContent;
 
-    public static final Content nbsp = new RawHtml("&nbsp;");
+  public static final Content nbsp = new RawHtml("&nbsp;");
 
-    /**
-     * Constructor to construct a RawHtml object.
-     *
-     * @param rawHtml raw HTML text to be added
-     */
-    public RawHtml(String rawHtml) {
-        rawHtmlContent = nullCheck(rawHtml);
+  /**
+   * Constructor to construct a RawHtml object.
+   *
+   * @param rawHtml raw HTML text to be added
+   */
+  public RawHtml(String rawHtml) {
+    rawHtmlContent = nullCheck(rawHtml);
+  }
+
+  /**
+   * This method is not supported by the class.
+   *
+   * @param content content that needs to be added
+   * @throws DocletAbortException this method will always throw a
+   *                              DocletAbortException because it
+   *                              is not supported.
+   */
+  public void addContent(Content content) {
+    throw new DocletAbortException("not supported");
+  }
+
+  /**
+   * This method is not supported by the class.
+   *
+   * @param stringContent string content that needs to be added
+   * @throws DocletAbortException this method will always throw a
+   *                              DocletAbortException because it
+   *                              is not supported.
+   */
+  public void addContent(String stringContent) {
+    throw new DocletAbortException("not supported");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEmpty() {
+    return rawHtmlContent.isEmpty();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return rawHtmlContent;
+  }
+
+  private enum State {
+    TEXT,
+    ENTITY,
+    TAG,
+    STRING
+  };
+
+  @Override
+  public int charCount() {
+    return charCount(rawHtmlContent);
+  }
+
+  static int charCount(String htmlText) {
+    State state = State.TEXT;
+    int count = 0;
+    for (int i = 0; i < htmlText.length(); i++) {
+      char c = htmlText.charAt(i);
+      switch (state) {
+        case TEXT:
+          switch (c) {
+            case '<':
+              state = State.TAG;
+              break;
+            case '&':
+              state = State.ENTITY;
+              count++;
+              break;
+            default:
+              count++;
+          }
+          break;
+
+        case ENTITY:
+          if (!Character.isLetterOrDigit(c)) state = State.TEXT;
+          break;
+
+        case TAG:
+          switch (c) {
+            case '"':
+              state = State.STRING;
+              break;
+            case '>':
+              state = State.TEXT;
+              break;
+          }
+          break;
+
+        case STRING:
+          switch (c) {
+            case '"':
+              state = State.TAG;
+              break;
+          }
+      }
     }
+    return count;
+  }
 
-    /**
-     * This method is not supported by the class.
-     *
-     * @param content content that needs to be added
-     * @throws DocletAbortException this method will always throw a
-     *                              DocletAbortException because it
-     *                              is not supported.
-     */
-    public void addContent(Content content) {
-        throw new DocletAbortException("not supported");
-    }
-
-    /**
-     * This method is not supported by the class.
-     *
-     * @param stringContent string content that needs to be added
-     * @throws DocletAbortException this method will always throw a
-     *                              DocletAbortException because it
-     *                              is not supported.
-     */
-    public void addContent(String stringContent) {
-        throw new DocletAbortException("not supported");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isEmpty() {
-        return rawHtmlContent.isEmpty();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return rawHtmlContent;
-    }
-
-    private enum State { TEXT, ENTITY, TAG, STRING };
-
-    @Override
-    public int charCount() {
-        return charCount(rawHtmlContent);
-    }
-
-    static int charCount(String htmlText) {
-        State state = State.TEXT;
-        int count = 0;
-        for (int i = 0; i < htmlText.length(); i++) {
-            char c = htmlText.charAt(i);
-            switch (state) {
-                case TEXT:
-                    switch (c) {
-                        case '<':
-                            state = State.TAG;
-                            break;
-                        case '&':
-                            state = State.ENTITY;
-                            count++;
-                            break;
-                        default:
-                            count++;
-                    }
-                    break;
-
-                case ENTITY:
-                    if (!Character.isLetterOrDigit(c))
-                        state = State.TEXT;
-                    break;
-
-                case TAG:
-                    switch (c) {
-                        case '"':
-                            state = State.STRING;
-                            break;
-                        case '>':
-                            state = State.TEXT;
-                            break;
-                    }
-                    break;
-
-                case STRING:
-                    switch (c) {
-                        case '"':
-                            state = State.TAG;
-                            break;
-                    }
-            }
-        }
-        return count;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean write(Writer out, boolean atNewline) throws IOException {
-        out.write(rawHtmlContent);
-        return rawHtmlContent.endsWith(DocletConstants.NL);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean write(Writer out, boolean atNewline) throws IOException {
+    out.write(rawHtmlContent);
+    return rawHtmlContent.endsWith(DocletConstants.NL);
+  }
 }

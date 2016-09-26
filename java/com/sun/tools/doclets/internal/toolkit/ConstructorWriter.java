@@ -40,87 +40,85 @@ import com.sun.javadoc.*;
  * @author Bhavesh Patel (Modified)
  * @since 1.5
  */
-
 public interface ConstructorWriter {
 
-    /**
-     * Get the constructor details tree header.
-     *
-     * @param classDoc the class being documented
-     * @param memberDetailsTree the content tree representing member details
-     * @return content tree for the constructor details header
-     */
-    public Content getConstructorDetailsTreeHeader(ClassDoc classDoc,
-            Content memberDetailsTree);
+  /**
+   * Get the constructor details tree header.
+   *
+   * @param classDoc the class being documented
+   * @param memberDetailsTree the content tree representing member details
+   * @return content tree for the constructor details header
+   */
+  public Content getConstructorDetailsTreeHeader(ClassDoc classDoc, Content memberDetailsTree);
 
-    /**
-     * Get the constructor documentation tree header.
-     *
-     * @param constructor the constructor being documented
-     * @param constructorDetailsTree the content tree representing constructor details
-     * @return content tree for the constructor documentation header
-     */
-    public Content getConstructorDocTreeHeader(ConstructorDoc constructor,
-            Content constructorDetailsTree);
+  /**
+   * Get the constructor documentation tree header.
+   *
+   * @param constructor the constructor being documented
+   * @param constructorDetailsTree the content tree representing constructor details
+   * @return content tree for the constructor documentation header
+   */
+  public Content getConstructorDocTreeHeader(
+      ConstructorDoc constructor, Content constructorDetailsTree);
 
-    /**
-     * Get the signature for the given constructor.
-     *
-     * @param constructor the constructor being documented
-     * @return content tree for the constructor signature
-     */
-    public Content getSignature(ConstructorDoc constructor);
+  /**
+   * Get the signature for the given constructor.
+   *
+   * @param constructor the constructor being documented
+   * @return content tree for the constructor signature
+   */
+  public Content getSignature(ConstructorDoc constructor);
 
-    /**
-     * Add the deprecated output for the given constructor.
-     *
-     * @param constructor the constructor being documented
-     * @param constructorDocTree content tree to which the deprecated information will be added
-     */
-    public void addDeprecated(ConstructorDoc constructor, Content constructorDocTree);
+  /**
+   * Add the deprecated output for the given constructor.
+   *
+   * @param constructor the constructor being documented
+   * @param constructorDocTree content tree to which the deprecated information will be added
+   */
+  public void addDeprecated(ConstructorDoc constructor, Content constructorDocTree);
 
-    /**
-     * Add the comments for the given constructor.
-     *
-     * @param constructor the constructor being documented
-     * @param constructorDocTree the content tree to which the comments will be added
-     */
-    public void addComments(ConstructorDoc constructor, Content constructorDocTree);
+  /**
+   * Add the comments for the given constructor.
+   *
+   * @param constructor the constructor being documented
+   * @param constructorDocTree the content tree to which the comments will be added
+   */
+  public void addComments(ConstructorDoc constructor, Content constructorDocTree);
 
-    /**
-     * Add the tags for the given constructor.
-     *
-     * @param constructor the constructor being documented
-     * @param constructorDocTree the content tree to which the tags will be added
-     */
-    public void addTags(ConstructorDoc constructor, Content constructorDocTree);
+  /**
+   * Add the tags for the given constructor.
+   *
+   * @param constructor the constructor being documented
+   * @param constructorDocTree the content tree to which the tags will be added
+   */
+  public void addTags(ConstructorDoc constructor, Content constructorDocTree);
 
-    /**
-     * Get the constructor details tree.
-     *
-     * @param memberDetailsTree the content tree representing member details
-     * @return content tree for the constructor details
-     */
-    public Content getConstructorDetails(Content memberDetailsTree);
+  /**
+   * Get the constructor details tree.
+   *
+   * @param memberDetailsTree the content tree representing member details
+   * @return content tree for the constructor details
+   */
+  public Content getConstructorDetails(Content memberDetailsTree);
 
-    /**
-     * Get the constructor documentation.
-     *
-     * @param constructorDocTree the content tree representing constructor documentation
-     * @param isLastContent true if the content to be added is the last content
-     * @return content tree for the constructor documentation
-     */
-    public Content getConstructorDoc(Content constructorDocTree, boolean isLastContent);
+  /**
+   * Get the constructor documentation.
+   *
+   * @param constructorDocTree the content tree representing constructor documentation
+   * @param isLastContent true if the content to be added is the last content
+   * @return content tree for the constructor documentation
+   */
+  public Content getConstructorDoc(Content constructorDocTree, boolean isLastContent);
 
-    /**
-     * Let the writer know whether a non public constructor was found.
-     *
-     * @param foundNonPubConstructor true if we found a non public constructor.
-     */
-    public void setFoundNonPubConstructor(boolean foundNonPubConstructor);
+  /**
+   * Let the writer know whether a non public constructor was found.
+   *
+   * @param foundNonPubConstructor true if we found a non public constructor.
+   */
+  public void setFoundNonPubConstructor(boolean foundNonPubConstructor);
 
-    /**
-     * Close the writer.
-     */
-    public void close() throws IOException;
+  /**
+   * Close the writer.
+   */
+  public void close() throws IOException;
 }

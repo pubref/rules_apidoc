@@ -39,17 +39,16 @@ import com.sun.tools.doclets.internal.toolkit.Content;
  * @author Jamie Ho
  * @since 1.5
  */
+public class DeprecatedTaglet extends BaseTaglet {
 
-public class DeprecatedTaglet extends BaseTaglet{
+  public DeprecatedTaglet() {
+    name = "deprecated";
+  }
 
-    public DeprecatedTaglet() {
-        name = "deprecated";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Content getTagletOutput(Doc holder, TagletWriter writer) {
-        return writer.deprecatedTagOutput(holder);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getTagletOutput(Doc holder, TagletWriter writer) {
+    return writer.deprecatedTagOutput(holder);
+  }
 }

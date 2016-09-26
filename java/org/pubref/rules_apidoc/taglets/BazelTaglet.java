@@ -12,12 +12,12 @@ import java.util.Map;
  * about {@bazel.doc attr}.
  * @author Paul Johnston
  */
-
 public class BazelTaglet implements Taglet {
 
   private static final String NAME = "bazel.doc";
 
-  private static final Map<String,String> PATHS = new java.util.HashMap();
+  private static final Map<String, String> PATHS = new java.util.HashMap();
+
   static {
     // Skylark objects
     PATHS.put("File", "skylark/lib/File.html");
@@ -163,11 +163,15 @@ public class BazelTaglet implements Taglet {
     String key = tag.text();
     String path = PATHS.get(key);
     if (path == null) {
-      throw new IllegalArgumentException("No known mapping to bazel library documentation for " + key);
+      throw new IllegalArgumentException(
+          "No known mapping to bazel library documentation for " + key);
     }
     return "<code><a target='_blank' style='color: #4caf50;' "
-      + "href='https://www.bazel.io/versions/master/docs/"
-      + path + "'>" + key + "</a></code>";
+        + "href='https://www.bazel.io/versions/master/docs/"
+        + path
+        + "'>"
+        + key
+        + "</a></code>";
   }
 
   /**
@@ -179,5 +183,4 @@ public class BazelTaglet implements Taglet {
   public String toString(Tag[] tags) {
     return null;
   }
-
 }

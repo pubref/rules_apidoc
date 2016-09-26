@@ -43,58 +43,57 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class Comment extends Content {
 
-    private String commentText;
+  private String commentText;
 
-    /**
-     * Constructor to construct a Comment object.
-     *
-     * @param comment comment text for the comment
-     */
-    public Comment(String comment) {
-        commentText = nullCheck(comment);
-    }
+  /**
+   * Constructor to construct a Comment object.
+   *
+   * @param comment comment text for the comment
+   */
+  public Comment(String comment) {
+    commentText = nullCheck(comment);
+  }
 
-    /**
-     * This method is not supported by the class.
-     *
-     * @param content content that needs to be added
-     * @throws DocletAbortException this method will always throw a
-     *                              DocletAbortException because it
-     *                              is not supported.
-     */
-    public void addContent(Content content) {
-        throw new DocletAbortException("not supported");
-    }
+  /**
+   * This method is not supported by the class.
+   *
+   * @param content content that needs to be added
+   * @throws DocletAbortException this method will always throw a
+   *                              DocletAbortException because it
+   *                              is not supported.
+   */
+  public void addContent(Content content) {
+    throw new DocletAbortException("not supported");
+  }
 
-    /**
-     * This method is not supported by the class.
-     *
-     * @param stringContent string content that needs to be added
-     * @throws DocletAbortException this method will always throw a
-     *                              DocletAbortException because it
-     *                              is not supported.
-     */
-    public void addContent(String stringContent) {
-        throw new DocletAbortException("not supported");
-    }
+  /**
+   * This method is not supported by the class.
+   *
+   * @param stringContent string content that needs to be added
+   * @throws DocletAbortException this method will always throw a
+   *                              DocletAbortException because it
+   *                              is not supported.
+   */
+  public void addContent(String stringContent) {
+    throw new DocletAbortException("not supported");
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isEmpty() {
-        return commentText.isEmpty();
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEmpty() {
+    return commentText.isEmpty();
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean write(Writer out, boolean atNewline) throws IOException {
-        if (!atNewline)
-            out.write(DocletConstants.NL);
-        out.write("<!-- ");
-        out.write(commentText);
-        out.write(" -->" + DocletConstants.NL);
-        return true;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean write(Writer out, boolean atNewline) throws IOException {
+    if (!atNewline) out.write(DocletConstants.NL);
+    out.write("<!-- ");
+    out.write(commentText);
+    out.write(" -->" + DocletConstants.NL);
+    return true;
+  }
 }

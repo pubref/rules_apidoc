@@ -48,139 +48,145 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class ProfilePackageFrameWriter extends HtmlDocletWriter {
 
-    /**
-     * The package being documented.
-     */
-    private PackageDoc packageDoc;
+  /**
+   * The package being documented.
+   */
+  private PackageDoc packageDoc;
 
-    /**
-     * Constructor to construct ProfilePackageFrameWriter object and to generate
-     * "profilename-package-frame.html" file in the respective package directory.
-     * For example for profile compact1 and package "java.lang" this will generate file
-     * "compact1-package-frame.html" file in the "java/lang" directory. It will also
-     * create "java/lang" directory in the current or the destination directory
-     * if it doesn't exist.
-     *
-     * @param configuration the configuration of the doclet.
-     * @param packageDoc PackageDoc under consideration.
-     * @param profileName the name of the profile being documented
-     */
-    public ProfilePackageFrameWriter(ConfigurationImpl configuration,
-            PackageDoc packageDoc, String profileName)
-            throws IOException {
-        super(configuration, DocPath.forPackage(packageDoc).resolve(
-                DocPaths.profilePackageFrame(profileName)));
-        this.packageDoc = packageDoc;
+  /**
+   * Constructor to construct ProfilePackageFrameWriter object and to generate
+   * "profilename-package-frame.html" file in the respective package directory.
+   * For example for profile compact1 and package "java.lang" this will generate file
+   * "compact1-package-frame.html" file in the "java/lang" directory. It will also
+   * create "java/lang" directory in the current or the destination directory
+   * if it doesn't exist.
+   *
+   * @param configuration the configuration of the doclet.
+   * @param packageDoc PackageDoc under consideration.
+   * @param profileName the name of the profile being documented
+   */
+  public ProfilePackageFrameWriter(
+      ConfigurationImpl configuration, PackageDoc packageDoc, String profileName)
+      throws IOException {
+    super(
+        configuration,
+        DocPath.forPackage(packageDoc).resolve(DocPaths.profilePackageFrame(profileName)));
+    this.packageDoc = packageDoc;
+  }
+
+  /**
+   * Generate a profile package summary page for the left-hand bottom frame. Construct
+   * the ProfilePackageFrameWriter object and then uses it generate the file.
+   *
+   * @param configuration the current configuration of the doclet.
+   * @param packageDoc The package for which "profilename-package-frame.html" is to be generated.
+   * @param profileValue the value of the profile being documented
+   */
+  public static void generate(
+      ConfigurationImpl configuration, PackageDoc packageDoc, int profileValue) {
+    ProfilePackageFrameWriter profpackgen;
+    try {
+      String profileName = Profile.lookup(profileValue).name;
+      profpackgen = new ProfilePackageFrameWriter(configuration, packageDoc, profileName);
+      StringBuilder winTitle = new StringBuilder(profileName);
+      String sep = " - ";
+      winTitle.append(sep);
+      String pkgName = Util.getPackageName(packageDoc);
+      winTitle.append(pkgName);
+      Content body = profpackgen.getBody(false, profpackgen.getWindowTitle(winTitle.toString()));
+      Content profName = new StringContent(profileName);
+      Content sepContent = new StringContent(sep);
+      Content pkgNameContent = new RawHtml(pkgName);
+      Content heading =
+          HtmlTree.HEADING(
+              HtmlConstants.TITLE_HEADING,
+              HtmlStyle.bar,
+              profpackgen.getTargetProfileLink("classFrame", profName, profileName));
+      heading.addContent(sepContent);
+      heading.addContent(
+          profpackgen.getTargetProfilePackageLink(
+              packageDoc, "classFrame", pkgNameContent, profileName));
+      body.addContent(heading);
+      HtmlTree div = new HtmlTree(HtmlTag.DIV);
+      div.addStyle(HtmlStyle.indexContainer);
+      profpackgen.addClassListing(div, profileValue);
+      body.addContent(div);
+      profpackgen.printHtmlDocument(
+          configuration.metakeywords.getMetaKeywords(packageDoc), false, body);
+      profpackgen.close();
+    } catch (IOException exc) {
+      configuration.standardmessage.error(
+          "doclet.exception_encountered", exc.toString(), DocPaths.PACKAGE_FRAME.getPath());
+      throw new DocletAbortException(exc);
     }
+  }
 
-    /**
-     * Generate a profile package summary page for the left-hand bottom frame. Construct
-     * the ProfilePackageFrameWriter object and then uses it generate the file.
-     *
-     * @param configuration the current configuration of the doclet.
-     * @param packageDoc The package for which "profilename-package-frame.html" is to be generated.
-     * @param profileValue the value of the profile being documented
-     */
-    public static void generate(ConfigurationImpl configuration,
-            PackageDoc packageDoc, int profileValue) {
-        ProfilePackageFrameWriter profpackgen;
-        try {
-            String profileName = Profile.lookup(profileValue).name;
-            profpackgen = new ProfilePackageFrameWriter(configuration, packageDoc,
-                    profileName);
-            StringBuilder winTitle = new StringBuilder(profileName);
-            String sep = " - ";
-            winTitle.append(sep);
-            String pkgName = Util.getPackageName(packageDoc);
-            winTitle.append(pkgName);
-            Content body = profpackgen.getBody(false,
-                    profpackgen.getWindowTitle(winTitle.toString()));
-            Content profName = new StringContent(profileName);
-            Content sepContent = new StringContent(sep);
-            Content pkgNameContent = new RawHtml(pkgName);
-            Content heading = HtmlTree.HEADING(HtmlConstants.TITLE_HEADING, HtmlStyle.bar,
-                    profpackgen.getTargetProfileLink("classFrame", profName, profileName));
-            heading.addContent(sepContent);
-            heading.addContent(profpackgen.getTargetProfilePackageLink(packageDoc,
-                    "classFrame", pkgNameContent, profileName));
-            body.addContent(heading);
-            HtmlTree div = new HtmlTree(HtmlTag.DIV);
-            div.addStyle(HtmlStyle.indexContainer);
-            profpackgen.addClassListing(div, profileValue);
-            body.addContent(div);
-            profpackgen.printHtmlDocument(
-                    configuration.metakeywords.getMetaKeywords(packageDoc), false, body);
-            profpackgen.close();
-        } catch (IOException exc) {
-            configuration.standardmessage.error(
-                    "doclet.exception_encountered",
-                    exc.toString(), DocPaths.PACKAGE_FRAME.getPath());
-            throw new DocletAbortException(exc);
+  /**
+   * Add class listing for all the classes in this package. Divide class
+   * listing as per the class kind and generate separate listing for
+   * Classes, Interfaces, Exceptions and Errors.
+   *
+   * @param contentTree the content tree to which the listing will be added
+   * @param profileValue the value of the profile being documented
+   */
+  protected void addClassListing(Content contentTree, int profileValue) {
+    if (packageDoc.isIncluded()) {
+      addClassKindListing(
+          packageDoc.interfaces(), getResource("doclet.Interfaces"), contentTree, profileValue);
+      addClassKindListing(
+          packageDoc.ordinaryClasses(), getResource("doclet.Classes"), contentTree, profileValue);
+      addClassKindListing(
+          packageDoc.enums(), getResource("doclet.Enums"), contentTree, profileValue);
+      addClassKindListing(
+          packageDoc.exceptions(), getResource("doclet.Exceptions"), contentTree, profileValue);
+      addClassKindListing(
+          packageDoc.errors(), getResource("doclet.Errors"), contentTree, profileValue);
+      addClassKindListing(
+          packageDoc.annotationTypes(),
+          getResource("doclet.AnnotationTypes"),
+          contentTree,
+          profileValue);
+    }
+  }
+
+  /**
+   * Add specific class kind listing. Also add label to the listing.
+   *
+   * @param arr Array of specific class kinds, namely Class or Interface or Exception or Error
+   * @param labelContent content tree of the label to be added
+   * @param contentTree the content tree to which the class kind listing will be added
+   * @param profileValue the value of the profile being documented
+   */
+  protected void addClassKindListing(
+      ClassDoc[] arr, Content labelContent, Content contentTree, int profileValue) {
+    if (arr.length > 0) {
+      Arrays.sort(arr);
+      boolean printedHeader = false;
+      HtmlTree ul = new HtmlTree(HtmlTag.UL);
+      ul.setTitle(labelContent);
+      for (int i = 0; i < arr.length; i++) {
+        if (!isTypeInProfile(arr[i], profileValue)) {
+          continue;
         }
-    }
-
-    /**
-     * Add class listing for all the classes in this package. Divide class
-     * listing as per the class kind and generate separate listing for
-     * Classes, Interfaces, Exceptions and Errors.
-     *
-     * @param contentTree the content tree to which the listing will be added
-     * @param profileValue the value of the profile being documented
-     */
-    protected void addClassListing(Content contentTree, int profileValue) {
-        if (packageDoc.isIncluded()) {
-            addClassKindListing(packageDoc.interfaces(),
-                getResource("doclet.Interfaces"), contentTree, profileValue);
-            addClassKindListing(packageDoc.ordinaryClasses(),
-                getResource("doclet.Classes"), contentTree, profileValue);
-            addClassKindListing(packageDoc.enums(),
-                getResource("doclet.Enums"), contentTree, profileValue);
-            addClassKindListing(packageDoc.exceptions(),
-                getResource("doclet.Exceptions"), contentTree, profileValue);
-            addClassKindListing(packageDoc.errors(),
-                getResource("doclet.Errors"), contentTree, profileValue);
-            addClassKindListing(packageDoc.annotationTypes(),
-                getResource("doclet.AnnotationTypes"), contentTree, profileValue);
+        if (!Util.isCoreClass(arr[i]) || !configuration.isGeneratedDoc(arr[i])) {
+          continue;
         }
-    }
-
-    /**
-     * Add specific class kind listing. Also add label to the listing.
-     *
-     * @param arr Array of specific class kinds, namely Class or Interface or Exception or Error
-     * @param labelContent content tree of the label to be added
-     * @param contentTree the content tree to which the class kind listing will be added
-     * @param profileValue the value of the profile being documented
-     */
-    protected void addClassKindListing(ClassDoc[] arr, Content labelContent,
-            Content contentTree, int profileValue) {
-        if(arr.length > 0) {
-            Arrays.sort(arr);
-            boolean printedHeader = false;
-            HtmlTree ul = new HtmlTree(HtmlTag.UL);
-            ul.setTitle(labelContent);
-            for (int i = 0; i < arr.length; i++) {
-                if (!isTypeInProfile(arr[i], profileValue)) {
-                    continue;
-                }
-                if (!Util.isCoreClass(arr[i]) || !
-                        configuration.isGeneratedDoc(arr[i])) {
-                    continue;
-                }
-                if (!printedHeader) {
-                    Content heading = HtmlTree.HEADING(HtmlConstants.CONTENT_HEADING,
-                            true, labelContent);
-                    contentTree.addContent(heading);
-                    printedHeader = true;
-                }
-                Content arr_i_name = new StringContent(arr[i].name());
-                if (arr[i].isInterface()) arr_i_name = HtmlTree.SPAN(HtmlStyle.interfaceName, arr_i_name);
-                Content link = getLink(new LinkInfoImpl(configuration,
-                        LinkInfoImpl.Kind.PACKAGE_FRAME, arr[i]).label(arr_i_name).target("classFrame"));
-                Content li = HtmlTree.LI(link);
-                ul.addContent(li);
-            }
-            contentTree.addContent(ul);
+        if (!printedHeader) {
+          Content heading = HtmlTree.HEADING(HtmlConstants.CONTENT_HEADING, true, labelContent);
+          contentTree.addContent(heading);
+          printedHeader = true;
         }
+        Content arr_i_name = new StringContent(arr[i].name());
+        if (arr[i].isInterface()) arr_i_name = HtmlTree.SPAN(HtmlStyle.interfaceName, arr_i_name);
+        Content link =
+            getLink(
+                new LinkInfoImpl(configuration, LinkInfoImpl.Kind.PACKAGE_FRAME, arr[i])
+                    .label(arr_i_name)
+                    .target("classFrame"));
+        Content li = HtmlTree.LI(link);
+        ul.addContent(li);
+      }
+      contentTree.addContent(ul);
     }
+  }
 }

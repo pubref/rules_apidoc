@@ -36,15 +36,15 @@ package com.sun.tools.doclets.internal.toolkit.taglets;
  */
 public class PropertySetterTaglet extends BasePropertyTaglet {
 
-    /**
-     * Construct a new PropertyGetterTaglet.
-     */
-    public PropertySetterTaglet () {
-        name = "propertySetter";
-    }
+  /**
+   * Construct a new PropertyGetterTaglet.
+   */
+  public PropertySetterTaglet() {
+    name = "propertySetter";
+  }
 
-    @Override
-    String getText(TagletWriter tagletWriter) {
-        return tagletWriter.configuration().getText("doclet.PropertySetter");
-    }
+  @Override
+  String getText(TagletWriter tagletWriter) {
+    return tagletWriter.configuration().getText("doclet.PropertySetter");
+  }
 }

@@ -58,100 +58,98 @@ import com.sun.javadoc.*;
  * @since 1.4
  * @author Jamie Ho
  */
-
 public interface Taglet {
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in field documentation.  Set to
-     * false for inline tags.
-     * @return true if this <code>Taglet</code>
-     * is used in field documentation and false
-     * otherwise.
-     */
-    public abstract boolean inField();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in field documentation.  Set to
+   * false for inline tags.
+   * @return true if this <code>Taglet</code>
+   * is used in field documentation and false
+   * otherwise.
+   */
+  public abstract boolean inField();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in constructor documentation. Set to
-     * false for inline tags.
-     * @return true if this <code>Taglet</code>
-     * is used in constructor documentation and false
-     * otherwise.
-     */
-    public abstract boolean inConstructor();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in constructor documentation. Set to
+   * false for inline tags.
+   * @return true if this <code>Taglet</code>
+   * is used in constructor documentation and false
+   * otherwise.
+   */
+  public abstract boolean inConstructor();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in method documentation. Set to
-     * false for inline tags.
-     * @return true if this <code>Taglet</code>
-     * is used in method documentation and false
-     * otherwise.
-     */
-    public abstract boolean inMethod();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in method documentation. Set to
+   * false for inline tags.
+   * @return true if this <code>Taglet</code>
+   * is used in method documentation and false
+   * otherwise.
+   */
+  public abstract boolean inMethod();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in overview documentation. Set to
-     * false for inline tags.
-     * @return true if this <code>Taglet</code>
-     * is used in method documentation and false
-     * otherwise.
-     */
-    public abstract boolean inOverview();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in overview documentation. Set to
+   * false for inline tags.
+   * @return true if this <code>Taglet</code>
+   * is used in method documentation and false
+   * otherwise.
+   */
+  public abstract boolean inOverview();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in package documentation. Set to
-     * false for inline tags.
-     * @return true if this <code>Taglet</code>
-     * is used in package documentation and false
-     * otherwise.
-     */
-    public abstract boolean inPackage();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in package documentation. Set to
+   * false for inline tags.
+   * @return true if this <code>Taglet</code>
+   * is used in package documentation and false
+   * otherwise.
+   */
+  public abstract boolean inPackage();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in type documentation (classes or
-     * interfaces). Set to false for inline tags.
-     * @return true if this <code>Taglet</code>
-     * is used in type documentation and false
-     * otherwise.
-     */
-    public abstract boolean inType();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in type documentation (classes or
+   * interfaces). Set to false for inline tags.
+   * @return true if this <code>Taglet</code>
+   * is used in type documentation and false
+   * otherwise.
+   */
+  public abstract boolean inType();
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is an inline tag. Return false otherwise.
-     * @return true if this <code>Taglet</code>
-     * is an inline tag and false otherwise.
-     */
-    public abstract boolean isInlineTag();
+  /**
+   * Return true if this <code>Taglet</code>
+   * is an inline tag. Return false otherwise.
+   * @return true if this <code>Taglet</code>
+   * is an inline tag and false otherwise.
+   */
+  public abstract boolean isInlineTag();
 
-    /**
-     * Return the name of this custom tag.
-     * @return the name of this custom tag.
-     */
-    public abstract String getName();
+  /**
+   * Return the name of this custom tag.
+   * @return the name of this custom tag.
+   */
+  public abstract String getName();
 
-    /**
-     * Given the <code>Tag</code> representation of this custom
-     * tag, return its string representation, which is output
-     * to the generated page.
-     * @param tag the <code>Tag</code> representation of this custom tag.
-     * @return the string representation of this <code>Tag</code>.
-     */
-    public abstract String toString(Tag tag);
+  /**
+   * Given the <code>Tag</code> representation of this custom
+   * tag, return its string representation, which is output
+   * to the generated page.
+   * @param tag the <code>Tag</code> representation of this custom tag.
+   * @return the string representation of this <code>Tag</code>.
+   */
+  public abstract String toString(Tag tag);
 
-    /**
-     * Given an array of <code>Tag</code>s representing this custom
-     * tag, return its string representation, which is output
-     * to the generated page.  This method should
-     * return null if this taglet represents an inline tag.
-     * @param tags the array of <code>Tag</code>s representing of this custom tag.
-     * @return the string representation of this <code>Tag</code>.
-     */
-    public abstract String toString(Tag[] tags);
-
+  /**
+   * Given an array of <code>Tag</code>s representing this custom
+   * tag, return its string representation, which is output
+   * to the generated page.  This method should
+   * return null if this taglet represents an inline tag.
+   * @param tags the array of <code>Tag</code>s representing of this custom tag.
+   * @return the string representation of this <code>Tag</code>.
+   */
+  public abstract String toString(Tag[] tags);
 }

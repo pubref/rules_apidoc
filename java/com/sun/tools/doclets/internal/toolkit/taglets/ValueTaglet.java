@@ -49,141 +49,139 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  * @author Jamie Ho
  * @since 1.4
  */
-
 public class ValueTaglet extends BaseInlineTaglet {
 
-    /**
-     * Construct a new ValueTaglet.
-     */
-    public ValueTaglet() {
-        name = "value";
-    }
+  /**
+   * Construct a new ValueTaglet.
+   */
+  public ValueTaglet() {
+    name = "value";
+  }
 
-    /**
-     * Will return false because this inline tag may
-     * only appear in Fields.
-     * @return false since this is not a method.
-     */
-    public boolean inMethod() {
-        return true;
-    }
+  /**
+   * Will return false because this inline tag may
+   * only appear in Fields.
+   * @return false since this is not a method.
+   */
+  public boolean inMethod() {
+    return true;
+  }
 
-    /**
-     * Will return false because this inline tag may
-     * only appear in Fields.
-     * @return false since this is not a method.
-     */
-    public boolean inConstructor() {
-        return true;
-    }
+  /**
+   * Will return false because this inline tag may
+   * only appear in Fields.
+   * @return false since this is not a method.
+   */
+  public boolean inConstructor() {
+    return true;
+  }
 
-    /**
-     * Will return false because this inline tag may
-     * only appear in Fields.
-     * @return false since this is not a method.
-     */
-    public boolean inOverview() {
-        return true;
-    }
+  /**
+   * Will return false because this inline tag may
+   * only appear in Fields.
+   * @return false since this is not a method.
+   */
+  public boolean inOverview() {
+    return true;
+  }
 
-    /**
-     * Will return false because this inline tag may
-     * only appear in Fields.
-     * @return false since this is not a method.
-     */
-    public boolean inPackage() {
-        return true;
-    }
+  /**
+   * Will return false because this inline tag may
+   * only appear in Fields.
+   * @return false since this is not a method.
+   */
+  public boolean inPackage() {
+    return true;
+  }
 
-    /**
-     * Will return false because this inline tag may
-     * only appear in Fields.
-     * @return false since this is not a method.
-     */
-    public boolean inType() {
-        return true;
-    }
+  /**
+   * Will return false because this inline tag may
+   * only appear in Fields.
+   * @return false since this is not a method.
+   */
+  public boolean inType() {
+    return true;
+  }
 
-    /**
-     * Given the name of the field, return the corresponding FieldDoc. Return null
-     * due to invalid use of value tag if the name is null or empty string and if
-     * the value tag is not used on a field.
-     *
-     * @param config the current configuration of the doclet.
-     * @param tag the value tag.
-     * @param name the name of the field to search for.  The name should be in
-     * {@code <qualified class name>#<field name>} format. If the class name is omitted,
-     * it is assumed that the field is in the current class.
-     *
-     * @return the corresponding FieldDoc. If the name is null or empty string,
-     * return field that the value tag was used in. Return null if the name is null
-     * or empty string and if the value tag is not used on a field.
-     */
-    private FieldDoc getFieldDoc(Configuration config, Tag tag, String name) {
-        if (name == null || name.length() == 0) {
-            //Base case: no label.
-            if (tag.holder() instanceof FieldDoc) {
-                return (FieldDoc) tag.holder();
-            } else {
-                // If the value tag does not specify a parameter which is a valid field and
-                // it is not used within the comments of a valid field, return null.
-                 return null;
-            }
-        }
-        StringTokenizer st = new StringTokenizer(name, "#");
-        String memberName = null;
-        ClassDoc cd = null;
-        if (st.countTokens() == 1) {
-            //Case 2:  @value in same class.
-            Doc holder = tag.holder();
-            if (holder instanceof MemberDoc) {
-                cd = ((MemberDoc) holder).containingClass();
-            } else if (holder instanceof ClassDoc) {
-                cd = (ClassDoc) holder;
-            }
-            memberName = st.nextToken();
-        } else {
-            //Case 3: @value in different class.
-            cd = config.root.classNamed(st.nextToken());
-            memberName = st.nextToken();
-        }
-        if (cd == null) {
-            return null;
-        }
-        FieldDoc[] fields = cd.fields();
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].name().equals(memberName)) {
-                return fields[i];
-            }
-        }
+  /**
+   * Given the name of the field, return the corresponding FieldDoc. Return null
+   * due to invalid use of value tag if the name is null or empty string and if
+   * the value tag is not used on a field.
+   *
+   * @param config the current configuration of the doclet.
+   * @param tag the value tag.
+   * @param name the name of the field to search for.  The name should be in
+   * {@code <qualified class name>#<field name>} format. If the class name is omitted,
+   * it is assumed that the field is in the current class.
+   *
+   * @return the corresponding FieldDoc. If the name is null or empty string,
+   * return field that the value tag was used in. Return null if the name is null
+   * or empty string and if the value tag is not used on a field.
+   */
+  private FieldDoc getFieldDoc(Configuration config, Tag tag, String name) {
+    if (name == null || name.length() == 0) {
+      //Base case: no label.
+      if (tag.holder() instanceof FieldDoc) {
+        return (FieldDoc) tag.holder();
+      } else {
+        // If the value tag does not specify a parameter which is a valid field and
+        // it is not used within the comments of a valid field, return null.
         return null;
+      }
     }
+    StringTokenizer st = new StringTokenizer(name, "#");
+    String memberName = null;
+    ClassDoc cd = null;
+    if (st.countTokens() == 1) {
+      //Case 2:  @value in same class.
+      Doc holder = tag.holder();
+      if (holder instanceof MemberDoc) {
+        cd = ((MemberDoc) holder).containingClass();
+      } else if (holder instanceof ClassDoc) {
+        cd = (ClassDoc) holder;
+      }
+      memberName = st.nextToken();
+    } else {
+      //Case 3: @value in different class.
+      cd = config.root.classNamed(st.nextToken());
+      memberName = st.nextToken();
+    }
+    if (cd == null) {
+      return null;
+    }
+    FieldDoc[] fields = cd.fields();
+    for (int i = 0; i < fields.length; i++) {
+      if (fields[i].name().equals(memberName)) {
+        return fields[i];
+      }
+    }
+    return null;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getTagletOutput(Tag tag, TagletWriter writer) {
-        FieldDoc field = getFieldDoc(
-            writer.configuration(), tag, tag.text());
-        if (field == null) {
-            if (tag.text().isEmpty()) {
-                //Invalid use of @value
-                writer.getMsgRetriever().warning(tag.holder().position(),
-                        "doclet.value_tag_invalid_use");
-            } else {
-                //Reference is unknown.
-                writer.getMsgRetriever().warning(tag.holder().position(),
-                        "doclet.value_tag_invalid_reference", tag.text());
-            }
-        } else if (field.constantValue() != null) {
-            return writer.valueTagOutput(field,
-                field.constantValueExpression(),
-                ! field.equals(tag.holder()));
-        } else {
-            //Referenced field is not a constant.
-            writer.getMsgRetriever().warning(tag.holder().position(),
-                "doclet.value_tag_invalid_constant", field.name());
-        }
-        return writer.getOutputInstance();
+  /**
+   * {@inheritDoc}
+   */
+  public Content getTagletOutput(Tag tag, TagletWriter writer) {
+    FieldDoc field = getFieldDoc(writer.configuration(), tag, tag.text());
+    if (field == null) {
+      if (tag.text().isEmpty()) {
+        //Invalid use of @value
+        writer.getMsgRetriever().warning(tag.holder().position(), "doclet.value_tag_invalid_use");
+      } else {
+        //Reference is unknown.
+        writer
+            .getMsgRetriever()
+            .warning(tag.holder().position(), "doclet.value_tag_invalid_reference", tag.text());
+      }
+    } else if (field.constantValue() != null) {
+      return writer.valueTagOutput(
+          field, field.constantValueExpression(), !field.equals(tag.holder()));
+    } else {
+      //Referenced field is not a constant.
+      writer
+          .getMsgRetriever()
+          .warning(tag.holder().position(), "doclet.value_tag_invalid_constant", field.name());
     }
+    return writer.getOutputInstance();
+  }
 }

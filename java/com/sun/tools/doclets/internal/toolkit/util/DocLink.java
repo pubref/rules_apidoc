@@ -39,59 +39,55 @@ package com.sun.tools.doclets.internal.toolkit.util;
  *
  */
 public class DocLink {
-    final String path;
-    final String query;
-    final String fragment;
+  final String path;
+  final String query;
+  final String fragment;
 
-    /** Create a DocLink representing the URI {@code #fragment}. */
-    public static DocLink fragment(String fragment) {
-        return new DocLink((String) null, (String) null, fragment);
-    }
+  /** Create a DocLink representing the URI {@code #fragment}. */
+  public static DocLink fragment(String fragment) {
+    return new DocLink((String) null, (String) null, fragment);
+  }
 
-    /** Create a DocLink representing the URI {@code path}. */
-    public DocLink(DocPath path) {
-        this(path.getPath(), null, null);
-    }
+  /** Create a DocLink representing the URI {@code path}. */
+  public DocLink(DocPath path) {
+    this(path.getPath(), null, null);
+  }
 
-    /**
-     * Create a DocLink representing the URI {@code path?query#fragment}.
-     * query and fragment may be null.
-     */
-    public DocLink(DocPath path, String query, String fragment) {
-        this(path.getPath(), query, fragment);
-    }
+  /**
+   * Create a DocLink representing the URI {@code path?query#fragment}.
+   * query and fragment may be null.
+   */
+  public DocLink(DocPath path, String query, String fragment) {
+    this(path.getPath(), query, fragment);
+  }
 
-    /**
-     * Create a DocLink representing the URI {@code path?query#fragment}.
-     * Any of the component parts may be null.
-     */
-    public DocLink(String path, String query, String fragment) {
-        this.path = path;
-        this.query = query;
-        this.fragment = fragment;
-    }
+  /**
+   * Create a DocLink representing the URI {@code path?query#fragment}.
+   * Any of the component parts may be null.
+   */
+  public DocLink(String path, String query, String fragment) {
+    this.path = path;
+    this.query = query;
+    this.fragment = fragment;
+  }
 
-    /**
-     * Return the link in the form "path?query#fragment", omitting any empty
-     * components.
-     */
-    @Override
-    public String toString() {
-        // common fast path
-        if (path != null && isEmpty(query) && isEmpty(fragment))
-            return path;
+  /**
+   * Return the link in the form "path?query#fragment", omitting any empty
+   * components.
+   */
+  @Override
+  public String toString() {
+    // common fast path
+    if (path != null && isEmpty(query) && isEmpty(fragment)) return path;
 
-        StringBuilder sb = new StringBuilder();
-        if (path != null)
-            sb.append(path);
-        if (!isEmpty(query))
-            sb.append("?").append(query);
-        if (!isEmpty(fragment))
-            sb.append("#").append(fragment);
-        return sb.toString();
-    }
+    StringBuilder sb = new StringBuilder();
+    if (path != null) sb.append(path);
+    if (!isEmpty(query)) sb.append("?").append(query);
+    if (!isEmpty(fragment)) sb.append("#").append(fragment);
+    return sb.toString();
+  }
 
-    private static boolean isEmpty(String s) {
-        return (s == null) || s.isEmpty();
-    }
+  private static boolean isEmpty(String s) {
+    return (s == null) || s.isEmpty();
+  }
 }

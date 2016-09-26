@@ -40,38 +40,36 @@ import com.sun.tools.doclets.internal.toolkit.util.links.*;
  */
 public class LinkOutputImpl implements LinkOutput {
 
-    /**
-     * The output of the link.
-     */
-    public StringBuilder output;
+  /**
+   * The output of the link.
+   */
+  public StringBuilder output;
 
-    /**
-     * Construct a new LinkOutputImpl.
-     */
-    public LinkOutputImpl() {
-        output = new StringBuilder();
-    }
+  /**
+   * Construct a new LinkOutputImpl.
+   */
+  public LinkOutputImpl() {
+    output = new StringBuilder();
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void append(Object o) {
-        output.append(o instanceof String ?
-            (String) o : ((LinkOutputImpl)o).toString());
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public void append(Object o) {
+    output.append(o instanceof String ? (String) o : ((LinkOutputImpl) o).toString());
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void insert(int offset, Object o) {
-        output.insert(offset, o.toString());
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public void insert(int offset, Object o) {
+    output.insert(offset, o.toString());
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String toString() {
-        return output.toString();
-    }
-
+  /**
+   * {@inheritDoc}
+   */
+  public String toString() {
+    return output.toString();
+  }
 }

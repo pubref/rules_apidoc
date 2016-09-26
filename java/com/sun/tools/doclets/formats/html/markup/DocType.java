@@ -43,61 +43,66 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class DocType extends Content {
 
-    private String docType;
+  private String docType;
 
-    public static final DocType TRANSITIONAL =
-            new DocType("Transitional", "http://www.w3.org/TR/html4/loose.dtd");
+  public static final DocType TRANSITIONAL =
+      new DocType("Transitional", "http://www.w3.org/TR/html4/loose.dtd");
 
-    public static final DocType FRAMESET =
-            new DocType("Frameset", "http://www.w3.org/TR/html4/frameset.dtd");
+  public static final DocType FRAMESET =
+      new DocType("Frameset", "http://www.w3.org/TR/html4/frameset.dtd");
 
-    /**
-     * Constructor to construct a DocType object.
-     *
-     * @param type the doctype to be added
-     */
-    private DocType(String type, String dtd) {
-        docType = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 " + type +
-                "//EN\" \"" + dtd + "\">" + DocletConstants.NL;
-    }
+  /**
+   * Constructor to construct a DocType object.
+   *
+   * @param type the doctype to be added
+   */
+  private DocType(String type, String dtd) {
+    docType =
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 "
+            + type
+            + "//EN\" \""
+            + dtd
+            + "\">"
+            + DocletConstants.NL;
+  }
 
-    /**
-     * This method is not supported by the class.
-     *
-     * @param content content that needs to be added
-     * @throws DocletAbortException this method will always throw a
-     *                              DocletAbortException because it
-     *                              is not supported.
-     */
-    public void addContent(Content content) {
-        throw new DocletAbortException("not supported");
-    }
+  /**
+   * This method is not supported by the class.
+   *
+   * @param content content that needs to be added
+   * @throws DocletAbortException this method will always throw a
+   *                              DocletAbortException because it
+   *                              is not supported.
+   */
+  public void addContent(Content content) {
+    throw new DocletAbortException("not supported");
+  }
 
-    /**
-     * This method is not supported by the class.
-     *
-     * @param stringContent string content that needs to be added
-     * @throws DocletAbortException this method will always throw a
-     *                              DocletAbortException because it
-     *                              is not supported.
-     */
-    public void addContent(String stringContent) {
-        throw new DocletAbortException("not supported");
-    }
+  /**
+   * This method is not supported by the class.
+   *
+   * @param stringContent string content that needs to be added
+   * @throws DocletAbortException this method will always throw a
+   *                              DocletAbortException because it
+   *                              is not supported.
+   */
+  public void addContent(String stringContent) {
+    throw new DocletAbortException("not supported");
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isEmpty() {
-        return (docType.length() == 0);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEmpty() {
+    return (docType.length() == 0);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean write(Writer out, boolean atNewline) throws IOException {
-        out.write(docType);
-        return true; // guaranteed by constructor
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean write(Writer out, boolean atNewline) throws IOException {
+    out.write(docType);
+    return true; // guaranteed by constructor
+  }
 }

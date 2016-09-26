@@ -1,17 +1,17 @@
-load("//apidoc:rules.bzl", "java_apidoc")
+load("//java:rules.bzl", "java_apidoc")
 
 filegroup(
     name = "srcs",
     srcs = [
         "BazelTaglet.java",
-    ]
+    ],
 )
 
 filegroup(
     name = "overview",
     srcs = [
         "overview.html",
-    ]
+    ],
 )
 
 java_library(
@@ -26,19 +26,18 @@ java_library(
 
 java_apidoc(
     name = "api",
-    deps = [
-        "bazel",
-        "//java:tools_jar",
-    ],
     srcs = [
         "srcs",
+    ],
+    overview = "overview.html",
+    quiet = True,
+    taglet = [
+        "org.pubref.rules_apidoc.taglets.BazelTaglet",
     ],
     taglet_deps = [
         "bazel",
     ],
-    taglet = [
-        "org.pubref.rules_apidoc.taglets.BazelTaglet",
+    deps = [
+        "bazel",
     ],
-    overview = "overview.html",
-    quiet = True,
 )

@@ -50,80 +50,77 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class LayoutParser extends DefaultHandler {
 
-    /**
-     * The map of XML elements that have been parsed.
-     */
-    private Map<String,XMLNode> xmlElementsMap;
-    private XMLNode currentNode;
-    private final Configuration configuration;
-    private String currentRoot;
-    private boolean isParsing;
+  /**
+   * The map of XML elements that have been parsed.
+   */
+  private Map<String, XMLNode> xmlElementsMap;
+  private XMLNode currentNode;
+  private final Configuration configuration;
+  private String currentRoot;
+  private boolean isParsing;
 
-    private LayoutParser(Configuration configuration) {
-        xmlElementsMap = new HashMap<String,XMLNode>();
-        this.configuration = configuration;
-    }
+  private LayoutParser(Configuration configuration) {
+    xmlElementsMap = new HashMap<String, XMLNode>();
+    this.configuration = configuration;
+  }
 
-    /**
-     * Return an instance of the BuilderXML.
-     *
-     * @param configuration the current configuration of the doclet.
-     * @return an instance of the BuilderXML.
-     */
-    public static LayoutParser getInstance(Configuration configuration) {
-        return new LayoutParser(configuration);
-    }
+  /**
+   * Return an instance of the BuilderXML.
+   *
+   * @param configuration the current configuration of the doclet.
+   * @return an instance of the BuilderXML.
+   */
+  public static LayoutParser getInstance(Configuration configuration) {
+    return new LayoutParser(configuration);
+  }
 
-    /**
-     * Parse the XML specifying the layout of the documentation.
-     *
-     * @return the list of XML elements parsed.
-     */
-    public XMLNode parseXML(String root) {
-        if (xmlElementsMap.containsKey(root)) {
-            return xmlElementsMap.get(root);
-        }
-        try {
-            currentRoot = root;
-            isParsing = false;
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser = factory.newSAXParser();
-            InputStream in = configuration.getBuilderXML();
-            saxParser.parse(in, this);
-            return xmlElementsMap.get(root);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            throw new DocletAbortException(t);
-        }
+  /**
+   * Parse the XML specifying the layout of the documentation.
+   *
+   * @return the list of XML elements parsed.
+   */
+  public XMLNode parseXML(String root) {
+    if (xmlElementsMap.containsKey(root)) {
+      return xmlElementsMap.get(root);
     }
+    try {
+      currentRoot = root;
+      isParsing = false;
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      SAXParser saxParser = factory.newSAXParser();
+      InputStream in = configuration.getBuilderXML();
+      saxParser.parse(in, this);
+      return xmlElementsMap.get(root);
+    } catch (Throwable t) {
+      t.printStackTrace();
+      throw new DocletAbortException(t);
+    }
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startElement(String namespaceURI, String sName, String qName,
-        Attributes attrs)
-    throws SAXException {
-        if (isParsing || qName.equals(currentRoot)) {
-            isParsing = true;
-            currentNode = new XMLNode(currentNode, qName);
-            for (int i = 0; i < attrs.getLength(); i++)
-                currentNode.attrs.put(attrs.getLocalName(i), attrs.getValue(i));
-            if (qName.equals(currentRoot))
-                xmlElementsMap.put(qName, currentNode);
-        }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
+      throws SAXException {
+    if (isParsing || qName.equals(currentRoot)) {
+      isParsing = true;
+      currentNode = new XMLNode(currentNode, qName);
+      for (int i = 0; i < attrs.getLength(); i++)
+        currentNode.attrs.put(attrs.getLocalName(i), attrs.getValue(i));
+      if (qName.equals(currentRoot)) xmlElementsMap.put(qName, currentNode);
     }
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void endElement(String namespaceURI, String sName, String qName)
-    throws SAXException {
-        if (! isParsing) {
-            return;
-        }
-        currentNode = currentNode.parent;
-        isParsing = ! qName.equals(currentRoot);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
+    if (!isParsing) {
+      return;
     }
+    currentNode = currentNode.parent;
+    isParsing = !qName.equals(currentRoot);
+  }
 }

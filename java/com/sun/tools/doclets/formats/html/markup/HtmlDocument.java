@@ -44,69 +44,67 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class HtmlDocument extends Content {
 
-    private List<Content> docContent = Collections.<Content>emptyList();
+  private List<Content> docContent = Collections.<Content>emptyList();
 
-    /**
-     * Constructor to construct an HTML document.
-     *
-     * @param docType document type for the HTML document
-     * @param docComment comment for the document
-     * @param htmlTree HTML tree of the document
-     */
-    public HtmlDocument(Content docType, Content docComment, Content htmlTree) {
-        docContent = new ArrayList<Content>();
-        addContent(nullCheck(docType));
-        addContent(nullCheck(docComment));
-        addContent(nullCheck(htmlTree));
-    }
+  /**
+   * Constructor to construct an HTML document.
+   *
+   * @param docType document type for the HTML document
+   * @param docComment comment for the document
+   * @param htmlTree HTML tree of the document
+   */
+  public HtmlDocument(Content docType, Content docComment, Content htmlTree) {
+    docContent = new ArrayList<Content>();
+    addContent(nullCheck(docType));
+    addContent(nullCheck(docComment));
+    addContent(nullCheck(htmlTree));
+  }
 
-    /**
-     * Constructor to construct an HTML document.
-     *
-     * @param docType document type for the HTML document
-     * @param htmlTree HTML tree of the document
-     */
-    public HtmlDocument(Content docType, Content htmlTree) {
-        docContent = new ArrayList<Content>();
-        addContent(nullCheck(docType));
-        addContent(nullCheck(htmlTree));
-    }
+  /**
+   * Constructor to construct an HTML document.
+   *
+   * @param docType document type for the HTML document
+   * @param htmlTree HTML tree of the document
+   */
+  public HtmlDocument(Content docType, Content htmlTree) {
+    docContent = new ArrayList<Content>();
+    addContent(nullCheck(docType));
+    addContent(nullCheck(htmlTree));
+  }
 
-    /**
-     * Adds content for the HTML document.
-     *
-     * @param htmlContent html content to be added
-     */
-    public final void addContent(Content htmlContent) {
-        if (htmlContent.isValid())
-            docContent.add(htmlContent);
-    }
+  /**
+   * Adds content for the HTML document.
+   *
+   * @param htmlContent html content to be added
+   */
+  public final void addContent(Content htmlContent) {
+    if (htmlContent.isValid()) docContent.add(htmlContent);
+  }
 
-    /**
-     * This method is not supported by the class.
-     *
-     * @param stringContent string content that needs to be added
-     * @throws DocletAbortException this method will always throw a
-     *                              DocletAbortException because it
-     *                              is not supported.
-     */
-    public void addContent(String stringContent) {
-        throw new DocletAbortException("not supported");
-    }
+  /**
+   * This method is not supported by the class.
+   *
+   * @param stringContent string content that needs to be added
+   * @throws DocletAbortException this method will always throw a
+   *                              DocletAbortException because it
+   *                              is not supported.
+   */
+  public void addContent(String stringContent) {
+    throw new DocletAbortException("not supported");
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isEmpty() {
-        return (docContent.isEmpty());
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEmpty() {
+    return (docContent.isEmpty());
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean write(Writer out,  boolean atNewline) throws IOException {
-        for (Content c : docContent)
-            atNewline = c.write(out, atNewline);
-        return atNewline;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public boolean write(Writer out, boolean atNewline) throws IOException {
+    for (Content c : docContent) atNewline = c.write(out, atNewline);
+    return atNewline;
+  }
 }

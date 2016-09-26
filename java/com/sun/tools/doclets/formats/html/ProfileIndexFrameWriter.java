@@ -47,131 +47,125 @@ import com.sun.tools.javac.jvm.Profile;
  */
 public class ProfileIndexFrameWriter extends AbstractProfileIndexWriter {
 
-    /**
-     * Construct the ProfileIndexFrameWriter object.
-     *
-     * @param configuration the configuration object
-     * @param filename Name of the profile index file to be generated.
-     */
-    public ProfileIndexFrameWriter(ConfigurationImpl configuration,
-                                   DocPath filename) throws IOException {
-        super(configuration, filename);
-    }
+  /**
+   * Construct the ProfileIndexFrameWriter object.
+   *
+   * @param configuration the configuration object
+   * @param filename Name of the profile index file to be generated.
+   */
+  public ProfileIndexFrameWriter(ConfigurationImpl configuration, DocPath filename)
+      throws IOException {
+    super(configuration, filename);
+  }
 
-    /**
-     * Generate the profile index file named "profile-overview-frame.html".
-     * @throws DocletAbortException
-     * @param configuration the configuration object
-     */
-    public static void generate(ConfigurationImpl configuration) {
-        ProfileIndexFrameWriter profilegen;
-        DocPath filename = DocPaths.PROFILE_OVERVIEW_FRAME;
-        try {
-            profilegen = new ProfileIndexFrameWriter(configuration, filename);
-            profilegen.buildProfileIndexFile("doclet.Window_Overview", false);
-            profilegen.close();
-        } catch (IOException exc) {
-            configuration.standardmessage.error(
-                        "doclet.exception_encountered",
-                        exc.toString(), filename);
-            throw new DocletAbortException(exc);
-        }
+  /**
+   * Generate the profile index file named "profile-overview-frame.html".
+   * @throws DocletAbortException
+   * @param configuration the configuration object
+   */
+  public static void generate(ConfigurationImpl configuration) {
+    ProfileIndexFrameWriter profilegen;
+    DocPath filename = DocPaths.PROFILE_OVERVIEW_FRAME;
+    try {
+      profilegen = new ProfileIndexFrameWriter(configuration, filename);
+      profilegen.buildProfileIndexFile("doclet.Window_Overview", false);
+      profilegen.close();
+    } catch (IOException exc) {
+      configuration.standardmessage.error("doclet.exception_encountered", exc.toString(), filename);
+      throw new DocletAbortException(exc);
     }
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected void addProfilesList(Profiles profiles, String text,
-            String tableSummary, Content body) {
-        Content heading = HtmlTree.HEADING(HtmlConstants.PROFILE_HEADING, true,
-                profilesLabel);
-        Content div = HtmlTree.DIV(HtmlStyle.indexContainer, heading);
-        HtmlTree ul = new HtmlTree(HtmlTag.UL);
-        ul.setTitle(profilesLabel);
-        String profileName;
-        for (int i = 1; i < profiles.getProfileCount(); i++) {
-            profileName = (Profile.lookup(i)).name;
-            // If the profile has valid packages to be documented, add it to the
-            // left-frame generated for profile index.
-            if (configuration.shouldDocumentProfile(profileName))
-                ul.addContent(getProfile(profileName));
-        }
-        div.addContent(ul);
-        body.addContent(div);
+  /**
+   * {@inheritDoc}
+   */
+  protected void addProfilesList(
+      Profiles profiles, String text, String tableSummary, Content body) {
+    Content heading = HtmlTree.HEADING(HtmlConstants.PROFILE_HEADING, true, profilesLabel);
+    Content div = HtmlTree.DIV(HtmlStyle.indexContainer, heading);
+    HtmlTree ul = new HtmlTree(HtmlTag.UL);
+    ul.setTitle(profilesLabel);
+    String profileName;
+    for (int i = 1; i < profiles.getProfileCount(); i++) {
+      profileName = (Profile.lookup(i)).name;
+      // If the profile has valid packages to be documented, add it to the
+      // left-frame generated for profile index.
+      if (configuration.shouldDocumentProfile(profileName)) ul.addContent(getProfile(profileName));
     }
+    div.addContent(ul);
+    body.addContent(div);
+  }
 
-    /**
-     * Gets each profile name as a separate link.
-     *
-     * @param profileName the profile being documented
-     * @return content for the profile link
-     */
-    protected Content getProfile(String profileName) {
-        Content profileLinkContent;
-        Content profileLabel;
-        profileLabel = new StringContent(profileName);
-        profileLinkContent = getHyperLink(DocPaths.profileFrame(profileName), profileLabel, "",
-                    "packageListFrame");
-        Content li = HtmlTree.LI(profileLinkContent);
-        return li;
-    }
+  /**
+   * Gets each profile name as a separate link.
+   *
+   * @param profileName the profile being documented
+   * @return content for the profile link
+   */
+  protected Content getProfile(String profileName) {
+    Content profileLinkContent;
+    Content profileLabel;
+    profileLabel = new StringContent(profileName);
+    profileLinkContent =
+        getHyperLink(DocPaths.profileFrame(profileName), profileLabel, "", "packageListFrame");
+    Content li = HtmlTree.LI(profileLinkContent);
+    return li;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected void addNavigationBarHeader(Content body) {
-        Content headerContent;
-        if (configuration.packagesheader.length() > 0) {
-            headerContent = new RawHtml(replaceDocRootDir(configuration.packagesheader));
-        } else {
-            headerContent = new RawHtml(replaceDocRootDir(configuration.header));
-        }
-        Content heading = HtmlTree.HEADING(HtmlConstants.TITLE_HEADING, true,
-                HtmlStyle.bar, headerContent);
-        body.addContent(heading);
+  /**
+   * {@inheritDoc}
+   */
+  protected void addNavigationBarHeader(Content body) {
+    Content headerContent;
+    if (configuration.packagesheader.length() > 0) {
+      headerContent = new RawHtml(replaceDocRootDir(configuration.packagesheader));
+    } else {
+      headerContent = new RawHtml(replaceDocRootDir(configuration.header));
     }
+    Content heading =
+        HtmlTree.HEADING(HtmlConstants.TITLE_HEADING, true, HtmlStyle.bar, headerContent);
+    body.addContent(heading);
+  }
 
-    /**
-     * Do nothing as there is no overview information in this page.
-     */
-    protected void addOverviewHeader(Content body) {
-    }
+  /**
+   * Do nothing as there is no overview information in this page.
+   */
+  protected void addOverviewHeader(Content body) {}
 
-    /**
-     * Adds "All Classes" link for the top of the left-hand frame page to the
-     * documentation tree.
-     *
-     * @param div the Content object to which the all classes link should be added
-     */
-    protected void addAllClassesLink(Content div) {
-        Content linkContent = getHyperLink(DocPaths.ALLCLASSES_FRAME,
-                allclassesLabel, "", "packageFrame");
-        Content span = HtmlTree.SPAN(linkContent);
-        div.addContent(span);
-    }
+  /**
+   * Adds "All Classes" link for the top of the left-hand frame page to the
+   * documentation tree.
+   *
+   * @param div the Content object to which the all classes link should be added
+   */
+  protected void addAllClassesLink(Content div) {
+    Content linkContent =
+        getHyperLink(DocPaths.ALLCLASSES_FRAME, allclassesLabel, "", "packageFrame");
+    Content span = HtmlTree.SPAN(linkContent);
+    div.addContent(span);
+  }
 
-    /**
-     * Adds "All Packages" link for the top of the left-hand frame page to the
-     * documentation tree.
-     *
-     * @param div the Content object to which the all packages link should be added
-     */
-    protected void addAllPackagesLink(Content div) {
-        Content linkContent = getHyperLink(DocPaths.OVERVIEW_FRAME,
-                allpackagesLabel, "", "packageListFrame");
-        Content span = HtmlTree.SPAN(linkContent);
-        div.addContent(span);
-    }
+  /**
+   * Adds "All Packages" link for the top of the left-hand frame page to the
+   * documentation tree.
+   *
+   * @param div the Content object to which the all packages link should be added
+   */
+  protected void addAllPackagesLink(Content div) {
+    Content linkContent =
+        getHyperLink(DocPaths.OVERVIEW_FRAME, allpackagesLabel, "", "packageListFrame");
+    Content span = HtmlTree.SPAN(linkContent);
+    div.addContent(span);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected void addNavigationBarFooter(Content body) {
-        Content p = HtmlTree.P(getSpace());
-        body.addContent(p);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  protected void addNavigationBarFooter(Content body) {
+    Content p = HtmlTree.P(getSpace());
+    body.addContent(p);
+  }
 
-    protected void addProfilePackagesList(Profiles profiles, String text,
-            String tableSummary, Content body, String profileName) {
-    }
+  protected void addProfilePackagesList(
+      Profiles profiles, String text, String tableSummary, Content body, String profileName) {}
 }

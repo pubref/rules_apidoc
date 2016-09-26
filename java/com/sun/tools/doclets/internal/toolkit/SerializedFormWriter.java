@@ -40,275 +40,277 @@ import com.sun.javadoc.*;
  * @author Jamie Ho
  * @since 1.5
  */
-
 public interface SerializedFormWriter {
 
+  /**
+   * Get the header.
+   *
+   * @param header the header to write.
+   * @return the header content tree
+   */
+  public Content getHeader(String header);
+
+  /**
+   * Get the serialized form summaries header.
+   *
+   * @return the serialized form summary header tree
+   */
+  public Content getSerializedSummariesHeader();
+
+  /**
+   * Get the package serialized form header.
+   *
+   * @return the package serialized form header tree
+   */
+  public Content getPackageSerializedHeader();
+
+  /**
+   * Get the given package header.
+   *
+   * @param packageName the package header to write
+   * @return a content tree for the package header
+   */
+  public Content getPackageHeader(String packageName);
+
+  /**
+   * Get the serialized class header.
+   *
+   * @return a content tree for the serialized class header
+   */
+  public Content getClassSerializedHeader();
+
+  /**
+   * Get the heading for the serializable class.
+   *
+   * @param classDoc the class being processed
+   * @return a content tree for the class heading
+   */
+  public Content getClassHeader(ClassDoc classDoc);
+
+  /**
+   * Get the serial UID info header.
+   *
+   * @return a content tree for the serial uid info header
+   */
+  public Content getSerialUIDInfoHeader();
+
+  /**
+   * Adds the serial UID info.
+   *
+   * @param header the header that will show up before the UID.
+   * @param serialUID the serial UID to print.
+   * @param serialUidTree the serial UID tree to which the content will be added.
+   */
+  public void addSerialUIDInfo(String header, String serialUID, Content serialUidTree);
+
+  /**
+   * Get the class serialize content header.
+   *
+   * @return a content tree for the class serialize content header
+   */
+  public Content getClassContentHeader();
+
+  /**
+   * Return an instance of a SerialFieldWriter.
+   *
+   * @return an instance of a SerialFieldWriter.
+   */
+  public SerialFieldWriter getSerialFieldWriter(ClassDoc classDoc);
+
+  /**
+   * Return an instance of a SerialMethodWriter.
+   *
+   * @return an instance of a SerialMethodWriter.
+   */
+  public SerialMethodWriter getSerialMethodWriter(ClassDoc classDoc);
+
+  /**
+   * Close the writer.
+   */
+  public abstract void close() throws IOException;
+
+  /**
+   * Get the serialized content.
+   *
+   * @param serializedTreeContent content for serialized data
+   * @return a content tree for serialized information
+   */
+  public Content getSerializedContent(Content serializedTreeContent);
+
+  /**
+   * Add the footer.
+   *
+   * @param serializedTree the serialized tree to be added
+   */
+  public void addFooter(Content serializedTree);
+
+  /**
+   * Print the serialized form document.
+   *
+   * @param serializedTree the content tree that will be printed
+   */
+  public abstract void printDocument(Content serializedTree) throws IOException;
+
+  /**
+   * Write the serialized form for a given field.
+   */
+  public interface SerialFieldWriter {
+
     /**
-     * Get the header.
+     * Get the serializable field header.
      *
-     * @param header the header to write.
-     * @return the header content tree
+     * @return serialized fields header content tree
      */
-    public Content getHeader(String header);
+    public Content getSerializableFieldsHeader();
 
     /**
-     * Get the serialized form summaries header.
+     * Get the field content header.
      *
-     * @return the serialized form summary header tree
+     * @param isLastContent true if this is the last content to be documented
+     * @return fields header content tree
      */
-    public Content getSerializedSummariesHeader();
+    public Content getFieldsContentHeader(boolean isLastContent);
 
     /**
-     * Get the package serialized form header.
+     * Get the fields content.
      *
-     * @return the package serialized form header tree
+     * @param heading the heading to write.
+     * @param contentTree content tree to which the heading will be added
+     * @return serializable fields content tree
      */
-    public Content getPackageSerializedHeader();
+    public Content getSerializableFields(String heading, Content contentTree);
 
     /**
-     * Get the given package header.
+     * Adds the deprecated information for this member.
      *
-     * @param packageName the package header to write
-     * @return a content tree for the package header
+     * @param field the field to document.
+     * @param contentTree content tree to which the deprecated information will be added
      */
-    public Content getPackageHeader(String packageName);
+    public void addMemberDeprecatedInfo(FieldDoc field, Content contentTree);
 
     /**
-     * Get the serialized class header.
+     * Adds the description text for this member.
      *
-     * @return a content tree for the serialized class header
+     * @param field the field to document.
+     * @param contentTree content tree to which the member description will be added
      */
-    public Content getClassSerializedHeader();
+    public void addMemberDescription(FieldDoc field, Content contentTree);
 
     /**
-     * Get the heading for the serializable class.
+     * Adds the description text for this member represented by the tag.
      *
-     * @param classDoc the class being processed
-     * @return a content tree for the class heading
+     * @param serialFieldTag the field to document (represented by tag).
+     * @param contentTree content tree to which the member description will be added
      */
-    public Content getClassHeader(ClassDoc classDoc);
+    public void addMemberDescription(SerialFieldTag serialFieldTag, Content contentTree);
 
     /**
-     * Get the serial UID info header.
+     * Adds the tag information for this member.
      *
-     * @return a content tree for the serial uid info header
+     * @param field the field to document.
+     * @param contentTree content tree to which the member tags will be added
      */
-    public Content getSerialUIDInfoHeader();
+    public void addMemberTags(FieldDoc field, Content contentTree);
 
     /**
-     * Adds the serial UID info.
+     * Adds the member header.
      *
-     * @param header the header that will show up before the UID.
-     * @param serialUID the serial UID to print.
-     * @param serialUidTree the serial UID tree to which the content will be added.
+     * @param fieldType the type of the field.
+     * @param fieldTypeStr the type of the field in string format.  We will
+     * print this out if we can't link to the type.
+     * @param fieldDimensions the dimensions of the field.
+     * @param fieldName the name of the field.
+     * @param contentTree content tree to which the member header will be added
      */
-    public void addSerialUIDInfo(String header, String serialUID,
-            Content serialUidTree);
+    public void addMemberHeader(
+        ClassDoc fieldType,
+        String fieldTypeStr,
+        String fieldDimensions,
+        String fieldName,
+        Content contentTree);
 
     /**
-     * Get the class serialize content header.
+     * Check to see if overview details should be printed. If
+     * nocomment option set or if there is no text to be printed
+     * for deprecation info, inline comment or tags,
+     * do not print overview details.
      *
-     * @return a content tree for the class serialize content header
+     * @param field the field to check overview details for.
+     * @return true if overview details need to be printed
      */
-    public Content getClassContentHeader();
+    public boolean shouldPrintOverview(FieldDoc field);
+  }
+
+  /**
+   * Write the serialized form for a given field.
+   */
+  public interface SerialMethodWriter {
 
     /**
-     * Return an instance of a SerialFieldWriter.
+     * Get the serializable method header.
      *
-     * @return an instance of a SerialFieldWriter.
+     * @return serializable methods content tree
      */
-    public SerialFieldWriter getSerialFieldWriter(ClassDoc classDoc);
+    public Content getSerializableMethodsHeader();
 
     /**
-     * Return an instance of a SerialMethodWriter.
+     * Get the method content header.
      *
-     * @return an instance of a SerialMethodWriter.
+     * @param isLastContent true if this is the last content to be documented
+     * @return methods content tree
      */
-    public SerialMethodWriter getSerialMethodWriter(ClassDoc classDoc);
+    public Content getMethodsContentHeader(boolean isLastContent);
 
     /**
-     * Close the writer.
-     */
-    public abstract void close() throws IOException;
-
-    /**
-     * Get the serialized content.
+     * Write the given heading.
      *
-     * @param serializedTreeContent content for serialized data
-     * @return a content tree for serialized information
+     * @param heading the heading to write
+     * @param serializableMethodTree content tree which will be added
+     * @return serializable methods content tree
      */
-    public Content getSerializedContent(Content serializedTreeContent);
+    public Content getSerializableMethods(String heading, Content serializableMethodTree);
 
     /**
-     * Add the footer.
+     * Write a warning that no serializable methods exist.
      *
-     * @param serializedTree the serialized tree to be added
+     * @param msg the warning to print
+     * @return no customization message tree
      */
-    public void addFooter(Content serializedTree);
+    public Content getNoCustomizationMsg(String msg);
 
     /**
-     * Print the serialized form document.
+     * Adds the header.
      *
-     * @param serializedTree the content tree that will be printed
+     * @param member the member to write the header for
+     * @param methodsContentTree content tree to which the header will be added
      */
-    public abstract void printDocument(Content serializedTree) throws IOException;
+    public void addMemberHeader(MethodDoc member, Content methodsContentTree);
 
     /**
-     * Write the serialized form for a given field.
+     * Adds the deprecated information for this member.
+     *
+     * @param member the member to write the deprecated information for
+     * @param methodsContentTree content tree to which the deprecated
+     * information will be added
      */
-    public interface SerialFieldWriter {
-
-        /**
-         * Get the serializable field header.
-         *
-         * @return serialized fields header content tree
-         */
-        public Content getSerializableFieldsHeader();
-
-        /**
-         * Get the field content header.
-         *
-         * @param isLastContent true if this is the last content to be documented
-         * @return fields header content tree
-         */
-        public Content getFieldsContentHeader(boolean isLastContent);
-
-        /**
-         * Get the fields content.
-         *
-         * @param heading the heading to write.
-         * @param contentTree content tree to which the heading will be added
-         * @return serializable fields content tree
-         */
-        public Content getSerializableFields(String heading, Content contentTree);
-
-        /**
-         * Adds the deprecated information for this member.
-         *
-         * @param field the field to document.
-         * @param contentTree content tree to which the deprecated information will be added
-         */
-        public void addMemberDeprecatedInfo(FieldDoc field, Content contentTree);
-
-        /**
-         * Adds the description text for this member.
-         *
-         * @param field the field to document.
-         * @param contentTree content tree to which the member description will be added
-         */
-        public void addMemberDescription(FieldDoc field, Content contentTree);
-
-        /**
-         * Adds the description text for this member represented by the tag.
-         *
-         * @param serialFieldTag the field to document (represented by tag).
-         * @param contentTree content tree to which the member description will be added
-         */
-        public void addMemberDescription(SerialFieldTag serialFieldTag, Content contentTree);
-
-        /**
-         * Adds the tag information for this member.
-         *
-         * @param field the field to document.
-         * @param contentTree content tree to which the member tags will be added
-         */
-        public void addMemberTags(FieldDoc field, Content contentTree);
-
-        /**
-         * Adds the member header.
-         *
-         * @param fieldType the type of the field.
-         * @param fieldTypeStr the type of the field in string format.  We will
-         * print this out if we can't link to the type.
-         * @param fieldDimensions the dimensions of the field.
-         * @param fieldName the name of the field.
-         * @param contentTree content tree to which the member header will be added
-         */
-        public void addMemberHeader(ClassDoc fieldType, String fieldTypeStr,
-            String fieldDimensions, String fieldName, Content contentTree);
-
-        /**
-         * Check to see if overview details should be printed. If
-         * nocomment option set or if there is no text to be printed
-         * for deprecation info, inline comment or tags,
-         * do not print overview details.
-         *
-         * @param field the field to check overview details for.
-         * @return true if overview details need to be printed
-         */
-        public boolean shouldPrintOverview(FieldDoc field);
-    }
+    public void addDeprecatedMemberInfo(MethodDoc member, Content methodsContentTree);
 
     /**
-     * Write the serialized form for a given field.
+     * Adds the description for this member.
+     *
+     * @param member the member to write the information for
+     * @param methodsContentTree content tree to which the member
+     * information will be added
      */
-    public interface SerialMethodWriter {
+    public void addMemberDescription(MethodDoc member, Content methodsContentTree);
 
-        /**
-         * Get the serializable method header.
-         *
-         * @return serializable methods content tree
-         */
-        public Content getSerializableMethodsHeader();
-
-        /**
-         * Get the method content header.
-         *
-         * @param isLastContent true if this is the last content to be documented
-         * @return methods content tree
-         */
-        public Content getMethodsContentHeader(boolean isLastContent);
-
-        /**
-         * Write the given heading.
-         *
-         * @param heading the heading to write
-         * @param serializableMethodTree content tree which will be added
-         * @return serializable methods content tree
-         */
-        public Content getSerializableMethods(String heading, Content serializableMethodTree);
-
-        /**
-         * Write a warning that no serializable methods exist.
-         *
-         * @param msg the warning to print
-         * @return no customization message tree
-         */
-        public Content getNoCustomizationMsg(String msg);
-
-        /**
-         * Adds the header.
-         *
-         * @param member the member to write the header for
-         * @param methodsContentTree content tree to which the header will be added
-         */
-        public void addMemberHeader(MethodDoc member, Content methodsContentTree);
-
-        /**
-         * Adds the deprecated information for this member.
-         *
-         * @param member the member to write the deprecated information for
-         * @param methodsContentTree content tree to which the deprecated
-         * information will be added
-         */
-        public void addDeprecatedMemberInfo(MethodDoc member, Content methodsContentTree);
-
-        /**
-         * Adds the description for this member.
-         *
-         * @param member the member to write the information for
-         * @param methodsContentTree content tree to which the member
-         * information will be added
-         */
-        public void addMemberDescription(MethodDoc member, Content methodsContentTree);
-
-        /**
-         * Adds the tag information for this member.
-         *
-         * @param member the member to write the tags information for
-         * @param methodsContentTree content tree to which the tags
-         * information will be added
-         */
-        public void addMemberTags(MethodDoc member, Content methodsContentTree);
-    }
+    /**
+     * Adds the tag information for this member.
+     *
+     * @param member the member to write the tags information for
+     * @param methodsContentTree content tree to which the tags
+     * information will be added
+     */
+    public void addMemberTags(MethodDoc member, Content methodsContentTree);
+  }
 }

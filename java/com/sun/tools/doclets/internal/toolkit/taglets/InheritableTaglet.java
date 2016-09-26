@@ -41,13 +41,13 @@ import com.sun.tools.doclets.internal.toolkit.util.DocFinder;
  */
 public interface InheritableTaglet extends Taglet {
 
-    /**
-     * Given an {@link com.sun.tools.doclets.internal.toolkit.util.DocFinder.Output}
-     * object, set its values with the appropriate information to inherit
-     * documentation.
-     *
-     * @param input  the input for documentation search.
-     * @param output the output for documentation search.
-     */
-    void inherit(DocFinder.Input input, DocFinder.Output output);
+  /**
+   * Given an {@link com.sun.tools.doclets.internal.toolkit.util.DocFinder.Output}
+   * object, set its values with the appropriate information to inherit
+   * documentation.
+   *
+   * @param input  the input for documentation search.
+   * @param output the output for documentation search.
+   */
+  void inherit(DocFinder.Input input, DocFinder.Output output);
 }

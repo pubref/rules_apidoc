@@ -32,13 +32,13 @@ package com.sun.tools.doclets.internal.toolkit.util;
  *  deletion without notice.</b>
  */
 public class DocletAbortException extends RuntimeException {
-    private static final long serialVersionUID = -9131058909576418984L;
+  private static final long serialVersionUID = -9131058909576418984L;
 
-    public DocletAbortException(String message) {
-        super(message);
-    }
+  public DocletAbortException(String message) {
+    super(message);
+  }
 
-    public DocletAbortException(Throwable cause) {
-        super(cause);
-    }
+  public DocletAbortException(Throwable cause) {
+    super(cause);
+  }
 }

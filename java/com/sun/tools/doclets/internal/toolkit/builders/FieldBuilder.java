@@ -45,185 +45,170 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class FieldBuilder extends AbstractMemberBuilder {
 
-    /**
-     * The class whose fields are being documented.
-     */
-    private final ClassDoc classDoc;
+  /**
+   * The class whose fields are being documented.
+   */
+  private final ClassDoc classDoc;
 
-    /**
-     * The visible fields for the given class.
-     */
-    private final VisibleMemberMap visibleMemberMap;
+  /**
+   * The visible fields for the given class.
+   */
+  private final VisibleMemberMap visibleMemberMap;
 
-    /**
-     * The writer to output the field documentation.
-     */
-    private final FieldWriter writer;
+  /**
+   * The writer to output the field documentation.
+   */
+  private final FieldWriter writer;
 
-    /**
-     * The list of fields being documented.
-     */
-    private final List<ProgramElementDoc> fields;
+  /**
+   * The list of fields being documented.
+   */
+  private final List<ProgramElementDoc> fields;
 
-    /**
-     * The index of the current field that is being documented at this point
-     * in time.
-     */
-    private int currentFieldIndex;
+  /**
+   * The index of the current field that is being documented at this point
+   * in time.
+   */
+  private int currentFieldIndex;
 
-    /**
-     * Construct a new FieldBuilder.
-     *
-     * @param context  the build context.
-     * @param classDoc the class whoses members are being documented.
-     * @param writer the doclet specific writer.
-     */
-    private FieldBuilder(Context context,
-            ClassDoc classDoc,
-            FieldWriter writer) {
-        super(context);
-        this.classDoc = classDoc;
-        this.writer = writer;
-        visibleMemberMap =
-                new VisibleMemberMap(
-                classDoc,
-                VisibleMemberMap.FIELDS,
-                configuration);
-        fields =
-                new ArrayList<ProgramElementDoc>(visibleMemberMap.getLeafClassMembers(
-                configuration));
-        if (configuration.getMemberComparator() != null) {
-            Collections.sort(fields, configuration.getMemberComparator());
-        }
+  /**
+   * Construct a new FieldBuilder.
+   *
+   * @param context  the build context.
+   * @param classDoc the class whoses members are being documented.
+   * @param writer the doclet specific writer.
+   */
+  private FieldBuilder(Context context, ClassDoc classDoc, FieldWriter writer) {
+    super(context);
+    this.classDoc = classDoc;
+    this.writer = writer;
+    visibleMemberMap = new VisibleMemberMap(classDoc, VisibleMemberMap.FIELDS, configuration);
+    fields = new ArrayList<ProgramElementDoc>(visibleMemberMap.getLeafClassMembers(configuration));
+    if (configuration.getMemberComparator() != null) {
+      Collections.sort(fields, configuration.getMemberComparator());
     }
+  }
 
-    /**
-     * Construct a new FieldBuilder.
-     *
-     * @param context  the build context.
-     * @param classDoc the class whoses members are being documented.
-     * @param writer the doclet specific writer.
-     */
-    public static FieldBuilder getInstance(Context context,
-            ClassDoc classDoc,
-            FieldWriter writer) {
-        return new FieldBuilder(context, classDoc, writer);
-    }
+  /**
+   * Construct a new FieldBuilder.
+   *
+   * @param context  the build context.
+   * @param classDoc the class whoses members are being documented.
+   * @param writer the doclet specific writer.
+   */
+  public static FieldBuilder getInstance(Context context, ClassDoc classDoc, FieldWriter writer) {
+    return new FieldBuilder(context, classDoc, writer);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getName() {
-        return "FieldDetails";
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public String getName() {
+    return "FieldDetails";
+  }
 
-    /**
-     * Returns a list of fields that will be documented for the given class.
-     * This information can be used for doclet specific documentation
-     * generation.
-     *
-     * @param classDoc the {@link ClassDoc} we want to check.
-     * @return a list of fields that will be documented.
-     */
-    public List<ProgramElementDoc> members(ClassDoc classDoc) {
-        return visibleMemberMap.getMembersFor(classDoc);
-    }
+  /**
+   * Returns a list of fields that will be documented for the given class.
+   * This information can be used for doclet specific documentation
+   * generation.
+   *
+   * @param classDoc the {@link ClassDoc} we want to check.
+   * @return a list of fields that will be documented.
+   */
+  public List<ProgramElementDoc> members(ClassDoc classDoc) {
+    return visibleMemberMap.getMembersFor(classDoc);
+  }
 
-    /**
-     * Returns the visible member map for the fields of this class.
-     *
-     * @return the visible member map for the fields of this class.
-     */
-    public VisibleMemberMap getVisibleMemberMap() {
-        return visibleMemberMap;
-    }
+  /**
+   * Returns the visible member map for the fields of this class.
+   *
+   * @return the visible member map for the fields of this class.
+   */
+  public VisibleMemberMap getVisibleMemberMap() {
+    return visibleMemberMap;
+  }
 
-    /**
-     * summaryOrder.size()
-     */
-    public boolean hasMembersToDocument() {
-        return fields.size() > 0;
-    }
+  /**
+   * summaryOrder.size()
+   */
+  public boolean hasMembersToDocument() {
+    return fields.size() > 0;
+  }
 
-    /**
-     * Build the field documentation.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param memberDetailsTree the content tree to which the documentation will be added
-     */
-    public void buildFieldDoc(XMLNode node, Content memberDetailsTree) {
-        if (writer == null) {
-            return;
-        }
-        int size = fields.size();
-        if (size > 0) {
-            Content fieldDetailsTree = writer.getFieldDetailsTreeHeader(
-                    classDoc, memberDetailsTree);
-            for (currentFieldIndex = 0; currentFieldIndex < size;
-                    currentFieldIndex++) {
-                Content fieldDocTree = writer.getFieldDocTreeHeader(
-                        (FieldDoc) fields.get(currentFieldIndex),
-                        fieldDetailsTree);
-                buildChildren(node, fieldDocTree);
-                fieldDetailsTree.addContent(writer.getFieldDoc(
-                        fieldDocTree, (currentFieldIndex == size - 1)));
-            }
-            memberDetailsTree.addContent(
-                    writer.getFieldDetails(fieldDetailsTree));
-        }
+  /**
+   * Build the field documentation.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param memberDetailsTree the content tree to which the documentation will be added
+   */
+  public void buildFieldDoc(XMLNode node, Content memberDetailsTree) {
+    if (writer == null) {
+      return;
     }
+    int size = fields.size();
+    if (size > 0) {
+      Content fieldDetailsTree = writer.getFieldDetailsTreeHeader(classDoc, memberDetailsTree);
+      for (currentFieldIndex = 0; currentFieldIndex < size; currentFieldIndex++) {
+        Content fieldDocTree =
+            writer.getFieldDocTreeHeader(
+                (FieldDoc) fields.get(currentFieldIndex), fieldDetailsTree);
+        buildChildren(node, fieldDocTree);
+        fieldDetailsTree.addContent(
+            writer.getFieldDoc(fieldDocTree, (currentFieldIndex == size - 1)));
+      }
+      memberDetailsTree.addContent(writer.getFieldDetails(fieldDetailsTree));
+    }
+  }
 
-    /**
-     * Build the signature.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param fieldDocTree the content tree to which the documentation will be added
-     */
-    public void buildSignature(XMLNode node, Content fieldDocTree) {
-        fieldDocTree.addContent(
-                writer.getSignature((FieldDoc) fields.get(currentFieldIndex)));
-    }
+  /**
+   * Build the signature.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param fieldDocTree the content tree to which the documentation will be added
+   */
+  public void buildSignature(XMLNode node, Content fieldDocTree) {
+    fieldDocTree.addContent(writer.getSignature((FieldDoc) fields.get(currentFieldIndex)));
+  }
 
-    /**
-     * Build the deprecation information.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param fieldDocTree the content tree to which the documentation will be added
-     */
-    public void buildDeprecationInfo(XMLNode node, Content fieldDocTree) {
-        writer.addDeprecated(
-                (FieldDoc) fields.get(currentFieldIndex), fieldDocTree);
-    }
+  /**
+   * Build the deprecation information.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param fieldDocTree the content tree to which the documentation will be added
+   */
+  public void buildDeprecationInfo(XMLNode node, Content fieldDocTree) {
+    writer.addDeprecated((FieldDoc) fields.get(currentFieldIndex), fieldDocTree);
+  }
 
-    /**
-     * Build the comments for the field.  Do nothing if
-     * {@link Configuration#nocomment} is set to true.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param fieldDocTree the content tree to which the documentation will be added
-     */
-    public void buildFieldComments(XMLNode node, Content fieldDocTree) {
-        if (!configuration.nocomment) {
-            writer.addComments((FieldDoc) fields.get(currentFieldIndex), fieldDocTree);
-        }
+  /**
+   * Build the comments for the field.  Do nothing if
+   * {@link Configuration#nocomment} is set to true.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param fieldDocTree the content tree to which the documentation will be added
+   */
+  public void buildFieldComments(XMLNode node, Content fieldDocTree) {
+    if (!configuration.nocomment) {
+      writer.addComments((FieldDoc) fields.get(currentFieldIndex), fieldDocTree);
     }
+  }
 
-    /**
-     * Build the tag information.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param fieldDocTree the content tree to which the documentation will be added
-     */
-    public void buildTagInfo(XMLNode node, Content fieldDocTree) {
-        writer.addTags((FieldDoc) fields.get(currentFieldIndex), fieldDocTree);
-    }
+  /**
+   * Build the tag information.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param fieldDocTree the content tree to which the documentation will be added
+   */
+  public void buildTagInfo(XMLNode node, Content fieldDocTree) {
+    writer.addTags((FieldDoc) fields.get(currentFieldIndex), fieldDocTree);
+  }
 
-    /**
-     * Return the field writer for this builder.
-     *
-     * @return the field writer for this builder.
-     */
-    public FieldWriter getWriter() {
-        return writer;
-    }
+  /**
+   * Return the field writer for this builder.
+   *
+   * @return the field writer for this builder.
+   */
+  public FieldWriter getWriter() {
+    return writer;
+  }
 }

@@ -45,197 +45,189 @@ import com.sun.tools.doclets.internal.toolkit.util.*;
  */
 public class AnnotationTypeRequiredMemberBuilder extends AbstractMemberBuilder {
 
-    /**
-     * The annotation type whose members are being documented.
-     */
-    protected ClassDoc classDoc;
+  /**
+   * The annotation type whose members are being documented.
+   */
+  protected ClassDoc classDoc;
 
-    /**
-     * The visible members for the given class.
-     */
-    protected VisibleMemberMap visibleMemberMap;
+  /**
+   * The visible members for the given class.
+   */
+  protected VisibleMemberMap visibleMemberMap;
 
-    /**
-     * The writer to output the member documentation.
-     */
-    protected AnnotationTypeRequiredMemberWriter writer;
+  /**
+   * The writer to output the member documentation.
+   */
+  protected AnnotationTypeRequiredMemberWriter writer;
 
-    /**
-     * The list of members being documented.
-     */
-    protected List<ProgramElementDoc> members;
+  /**
+   * The list of members being documented.
+   */
+  protected List<ProgramElementDoc> members;
 
-    /**
-     * The index of the current member that is being documented at this point
-     * in time.
-     */
-    protected int currentMemberIndex;
+  /**
+   * The index of the current member that is being documented at this point
+   * in time.
+   */
+  protected int currentMemberIndex;
 
-    /**
-     * Construct a new AnnotationTypeRequiredMemberBuilder.
-     *
-     * @param context  the build context.
-     * @param classDoc the class whose members are being documented.
-     * @param writer the doclet specific writer.
-     */
-    protected AnnotationTypeRequiredMemberBuilder(Context context,
-            ClassDoc classDoc,
-            AnnotationTypeRequiredMemberWriter writer,
-            int memberType) {
-        super(context);
-        this.classDoc = classDoc;
-        this.writer = writer;
-        this.visibleMemberMap = new VisibleMemberMap(classDoc, memberType,
-            configuration);
-        this.members = new ArrayList<ProgramElementDoc>(
-            this.visibleMemberMap.getMembersFor(classDoc));
-        if (configuration.getMemberComparator() != null) {
-            Collections.sort(this.members, configuration.getMemberComparator());
-        }
+  /**
+   * Construct a new AnnotationTypeRequiredMemberBuilder.
+   *
+   * @param context  the build context.
+   * @param classDoc the class whose members are being documented.
+   * @param writer the doclet specific writer.
+   */
+  protected AnnotationTypeRequiredMemberBuilder(
+      Context context,
+      ClassDoc classDoc,
+      AnnotationTypeRequiredMemberWriter writer,
+      int memberType) {
+    super(context);
+    this.classDoc = classDoc;
+    this.writer = writer;
+    this.visibleMemberMap = new VisibleMemberMap(classDoc, memberType, configuration);
+    this.members = new ArrayList<ProgramElementDoc>(this.visibleMemberMap.getMembersFor(classDoc));
+    if (configuration.getMemberComparator() != null) {
+      Collections.sort(this.members, configuration.getMemberComparator());
     }
+  }
 
+  /**
+   * Construct a new AnnotationTypeMemberBuilder.
+   *
+   * @param context  the build context.
+   * @param classDoc the class whose members are being documented.
+   * @param writer the doclet specific writer.
+   */
+  public static AnnotationTypeRequiredMemberBuilder getInstance(
+      Context context, ClassDoc classDoc, AnnotationTypeRequiredMemberWriter writer) {
+    return new AnnotationTypeRequiredMemberBuilder(
+        context, classDoc, writer, VisibleMemberMap.ANNOTATION_TYPE_MEMBER_REQUIRED);
+  }
 
-    /**
-     * Construct a new AnnotationTypeMemberBuilder.
-     *
-     * @param context  the build context.
-     * @param classDoc the class whose members are being documented.
-     * @param writer the doclet specific writer.
-     */
-    public static AnnotationTypeRequiredMemberBuilder getInstance(
-            Context context, ClassDoc classDoc,
-            AnnotationTypeRequiredMemberWriter writer) {
-        return new AnnotationTypeRequiredMemberBuilder(context, classDoc,
-                    writer,
-                    VisibleMemberMap.ANNOTATION_TYPE_MEMBER_REQUIRED);
+  /**
+   * {@inheritDoc}
+   */
+  public String getName() {
+    return "AnnotationTypeRequiredMemberDetails";
+  }
+
+  /**
+   * Returns a list of members that will be documented for the given class.
+   * This information can be used for doclet specific documentation
+   * generation.
+   *
+   * @param classDoc the {@link ClassDoc} we want to check.
+   * @return a list of members that will be documented.
+   */
+  public List<ProgramElementDoc> members(ClassDoc classDoc) {
+    return visibleMemberMap.getMembersFor(classDoc);
+  }
+
+  /**
+   * Returns the visible member map for the members of this class.
+   *
+   * @return the visible member map for the members of this class.
+   */
+  public VisibleMemberMap getVisibleMemberMap() {
+    return visibleMemberMap;
+  }
+
+  /**
+   * summaryOrder.size()
+   */
+  public boolean hasMembersToDocument() {
+    return members.size() > 0;
+  }
+
+  /**
+   * Build the annotation type required member documentation.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param memberDetailsTree the content tree to which the documentation will be added
+   */
+  public void buildAnnotationTypeRequiredMember(XMLNode node, Content memberDetailsTree) {
+    buildAnnotationTypeMember(node, memberDetailsTree);
+  }
+
+  /**
+   * Build the member documentation.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param memberDetailsTree the content tree to which the documentation will be added
+   */
+  public void buildAnnotationTypeMember(XMLNode node, Content memberDetailsTree) {
+    if (writer == null) {
+      return;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getName() {
-        return "AnnotationTypeRequiredMemberDetails";
+    int size = members.size();
+    if (size > 0) {
+      writer.addAnnotationDetailsMarker(memberDetailsTree);
+      for (currentMemberIndex = 0; currentMemberIndex < size; currentMemberIndex++) {
+        Content detailsTree = writer.getMemberTreeHeader();
+        writer.addAnnotationDetailsTreeHeader(classDoc, detailsTree);
+        Content annotationDocTree =
+            writer.getAnnotationDocTreeHeader(
+                (MemberDoc) members.get(currentMemberIndex), detailsTree);
+        buildChildren(node, annotationDocTree);
+        detailsTree.addContent(
+            writer.getAnnotationDoc(annotationDocTree, (currentMemberIndex == size - 1)));
+        memberDetailsTree.addContent(writer.getAnnotationDetails(detailsTree));
+      }
     }
+  }
 
-    /**
-     * Returns a list of members that will be documented for the given class.
-     * This information can be used for doclet specific documentation
-     * generation.
-     *
-     * @param classDoc the {@link ClassDoc} we want to check.
-     * @return a list of members that will be documented.
-     */
-    public List<ProgramElementDoc> members(ClassDoc classDoc) {
-        return visibleMemberMap.getMembersFor(classDoc);
-    }
+  /**
+   * Build the signature.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param annotationDocTree the content tree to which the documentation will be added
+   */
+  public void buildSignature(XMLNode node, Content annotationDocTree) {
+    annotationDocTree.addContent(writer.getSignature((MemberDoc) members.get(currentMemberIndex)));
+  }
 
-    /**
-     * Returns the visible member map for the members of this class.
-     *
-     * @return the visible member map for the members of this class.
-     */
-    public VisibleMemberMap getVisibleMemberMap() {
-        return visibleMemberMap;
-    }
+  /**
+   * Build the deprecation information.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param annotationDocTree the content tree to which the documentation will be added
+   */
+  public void buildDeprecationInfo(XMLNode node, Content annotationDocTree) {
+    writer.addDeprecated((MemberDoc) members.get(currentMemberIndex), annotationDocTree);
+  }
 
-    /**
-     * summaryOrder.size()
-     */
-    public boolean hasMembersToDocument() {
-        return members.size() > 0;
+  /**
+   * Build the comments for the member.  Do nothing if
+   * {@link Configuration#nocomment} is set to true.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param annotationDocTree the content tree to which the documentation will be added
+   */
+  public void buildMemberComments(XMLNode node, Content annotationDocTree) {
+    if (!configuration.nocomment) {
+      writer.addComments((MemberDoc) members.get(currentMemberIndex), annotationDocTree);
     }
+  }
 
-    /**
-     * Build the annotation type required member documentation.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param memberDetailsTree the content tree to which the documentation will be added
-     */
-    public void buildAnnotationTypeRequiredMember(XMLNode node, Content memberDetailsTree) {
-        buildAnnotationTypeMember(node, memberDetailsTree);
-    }
+  /**
+   * Build the tag information.
+   *
+   * @param node the XML element that specifies which components to document
+   * @param annotationDocTree the content tree to which the documentation will be added
+   */
+  public void buildTagInfo(XMLNode node, Content annotationDocTree) {
+    writer.addTags((MemberDoc) members.get(currentMemberIndex), annotationDocTree);
+  }
 
-    /**
-     * Build the member documentation.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param memberDetailsTree the content tree to which the documentation will be added
-     */
-    public void buildAnnotationTypeMember(XMLNode node, Content memberDetailsTree) {
-        if (writer == null) {
-            return;
-        }
-        int size = members.size();
-        if (size > 0) {
-            writer.addAnnotationDetailsMarker(memberDetailsTree);
-            for (currentMemberIndex = 0; currentMemberIndex < size;
-                    currentMemberIndex++) {
-                Content detailsTree = writer.getMemberTreeHeader();
-                writer.addAnnotationDetailsTreeHeader(classDoc, detailsTree);
-                Content annotationDocTree = writer.getAnnotationDocTreeHeader(
-                        (MemberDoc) members.get(currentMemberIndex), detailsTree);
-                buildChildren(node, annotationDocTree);
-                detailsTree.addContent(writer.getAnnotationDoc(
-                        annotationDocTree, (currentMemberIndex == size - 1)));
-                memberDetailsTree.addContent(writer.getAnnotationDetails(detailsTree));
-            }
-        }
-    }
-
-    /**
-     * Build the signature.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param annotationDocTree the content tree to which the documentation will be added
-     */
-    public void buildSignature(XMLNode node, Content annotationDocTree) {
-        annotationDocTree.addContent(
-                writer.getSignature((MemberDoc) members.get(currentMemberIndex)));
-    }
-
-    /**
-     * Build the deprecation information.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param annotationDocTree the content tree to which the documentation will be added
-     */
-    public void buildDeprecationInfo(XMLNode node, Content annotationDocTree) {
-        writer.addDeprecated((MemberDoc) members.get(currentMemberIndex),
-                annotationDocTree);
-    }
-
-    /**
-     * Build the comments for the member.  Do nothing if
-     * {@link Configuration#nocomment} is set to true.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param annotationDocTree the content tree to which the documentation will be added
-     */
-    public void buildMemberComments(XMLNode node, Content annotationDocTree) {
-        if(! configuration.nocomment){
-            writer.addComments((MemberDoc) members.get(currentMemberIndex),
-                    annotationDocTree);
-        }
-    }
-
-    /**
-     * Build the tag information.
-     *
-     * @param node the XML element that specifies which components to document
-     * @param annotationDocTree the content tree to which the documentation will be added
-     */
-    public void buildTagInfo(XMLNode node, Content annotationDocTree) {
-        writer.addTags((MemberDoc) members.get(currentMemberIndex),
-                annotationDocTree);
-    }
-
-    /**
-     * Return the annotation type required member writer for this builder.
-     *
-     * @return the annotation type required member constant writer for this
-     * builder.
-     */
-    public AnnotationTypeRequiredMemberWriter getWriter() {
-        return writer;
-    }
+  /**
+   * Return the annotation type required member writer for this builder.
+   *
+   * @return the annotation type required member constant writer for this
+   * builder.
+   */
+  public AnnotationTypeRequiredMemberWriter getWriter() {
+    return writer;
+  }
 }

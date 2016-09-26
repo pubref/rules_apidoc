@@ -40,80 +40,77 @@ import com.sun.javadoc.*;
  * @author Bhavesh Patel (Modified)
  * @since 1.7
  */
-
 public interface PropertyWriter {
 
-    /**
-     * Get the property details tree header.
-     *
-     * @param classDoc the class being documented
-     * @param memberDetailsTree the content tree representing member details
-     * @return content tree for the property details header
-     */
-    public Content getPropertyDetailsTreeHeader(ClassDoc classDoc,
-            Content memberDetailsTree);
+  /**
+   * Get the property details tree header.
+   *
+   * @param classDoc the class being documented
+   * @param memberDetailsTree the content tree representing member details
+   * @return content tree for the property details header
+   */
+  public Content getPropertyDetailsTreeHeader(ClassDoc classDoc, Content memberDetailsTree);
 
-    /**
-     * Get the property documentation tree header.
-     *
-     * @param property the property being documented
-     * @param propertyDetailsTree the content tree representing property details
-     * @return content tree for the property documentation header
-     */
-    public Content getPropertyDocTreeHeader(MethodDoc property,
-            Content propertyDetailsTree);
+  /**
+   * Get the property documentation tree header.
+   *
+   * @param property the property being documented
+   * @param propertyDetailsTree the content tree representing property details
+   * @return content tree for the property documentation header
+   */
+  public Content getPropertyDocTreeHeader(MethodDoc property, Content propertyDetailsTree);
 
-    /**
-     * Get the signature for the given property.
-     *
-     * @param property the property being documented
-     * @return content tree for the property signature
-     */
-    public Content getSignature(MethodDoc property);
+  /**
+   * Get the signature for the given property.
+   *
+   * @param property the property being documented
+   * @return content tree for the property signature
+   */
+  public Content getSignature(MethodDoc property);
 
-    /**
-     * Add the deprecated output for the given property.
-     *
-     * @param property the property being documented
-     * @param propertyDocTree content tree to which the deprecated information will be added
-     */
-    public void addDeprecated(MethodDoc property, Content propertyDocTree);
+  /**
+   * Add the deprecated output for the given property.
+   *
+   * @param property the property being documented
+   * @param propertyDocTree content tree to which the deprecated information will be added
+   */
+  public void addDeprecated(MethodDoc property, Content propertyDocTree);
 
-    /**
-     * Add the comments for the given property.
-     *
-     * @param property the property being documented
-     * @param propertyDocTree the content tree to which the comments will be added
-     */
-    public void addComments(MethodDoc property, Content propertyDocTree);
+  /**
+   * Add the comments for the given property.
+   *
+   * @param property the property being documented
+   * @param propertyDocTree the content tree to which the comments will be added
+   */
+  public void addComments(MethodDoc property, Content propertyDocTree);
 
-    /**
-     * Add the tags for the given property.
-     *
-     * @param property the property being documented
-     * @param propertyDocTree the content tree to which the tags will be added
-     */
-    public void addTags(MethodDoc property, Content propertyDocTree);
+  /**
+   * Add the tags for the given property.
+   *
+   * @param property the property being documented
+   * @param propertyDocTree the content tree to which the tags will be added
+   */
+  public void addTags(MethodDoc property, Content propertyDocTree);
 
-    /**
-     * Get the property details tree.
-     *
-     * @param memberDetailsTree the content tree representing member details
-     * @return content tree for the property details
-     */
-    public Content getPropertyDetails(Content memberDetailsTree);
+  /**
+   * Get the property details tree.
+   *
+   * @param memberDetailsTree the content tree representing member details
+   * @return content tree for the property details
+   */
+  public Content getPropertyDetails(Content memberDetailsTree);
 
-    /**
-     * Get the property documentation.
-     *
-     * @param propertyDocTree the content tree representing property documentation
-     * @param isLastContent true if the content to be added is the last content
-     * @return content tree for the property documentation
-     */
-    public Content getPropertyDoc(Content propertyDocTree, boolean isLastContent);
+  /**
+   * Get the property documentation.
+   *
+   * @param propertyDocTree the content tree representing property documentation
+   * @param isLastContent true if the content to be added is the last content
+   * @return content tree for the property documentation
+   */
+  public Content getPropertyDoc(Content propertyDocTree, boolean isLastContent);
 
-    /**
-     * Close the writer.
-     */
-    public void close() throws IOException;
+  /**
+   * Close the writer.
+   */
+  public void close() throws IOException;
 }

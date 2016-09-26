@@ -36,14 +36,13 @@ package com.sun.tools.doclets.internal.toolkit.taglets;
  * @author Jamie Ho
  * @since 1.4
  */
-
 public abstract class BaseInlineTaglet extends BaseTaglet {
 
-    /**
-     * Will return true since this is an inline tag.
-     * @return true since this is an inline tag.
-     */
-    public boolean isInlineTag() {
-        return true;
-    }
+  /**
+   * Will return true since this is an inline tag.
+   * @return true since this is an inline tag.
+   */
+  public boolean isInlineTag() {
+    return true;
+  }
 }

@@ -48,24 +48,23 @@ import com.sun.tools.doclets.internal.toolkit.Content;
  * @author Scott Seligman
  * @since 1.5
  */
-
 public class CodeTaglet extends BaseInlineTaglet {
 
-    private static final String NAME = "code";
+  private static final String NAME = "code";
 
-    public static void register(Map<String, Taglet> map) {
-        map.remove(NAME);
-        map.put(NAME, new CodeTaglet());
-    }
+  public static void register(Map<String, Taglet> map) {
+    map.remove(NAME);
+    map.put(NAME, new CodeTaglet());
+  }
 
-    public String getName() {
-        return NAME;
-    }
+  public String getName() {
+    return NAME;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getTagletOutput(Tag tag, TagletWriter writer) {
-        return writer.codeTagOutput(tag);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getTagletOutput(Tag tag, TagletWriter writer) {
+    return writer.codeTagOutput(tag);
+  }
 }

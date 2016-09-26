@@ -29,7 +29,6 @@ import java.util.Map;
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.internal.toolkit.Content;
 
-
 /**
  * An inline Taglet used to denote literal text.
  * The enclosed text is interpreted as not containing HTML markup or
@@ -47,24 +46,23 @@ import com.sun.tools.doclets.internal.toolkit.Content;
  * @author Scott Seligman
  * @since 1.5
  */
-
 public class LiteralTaglet extends BaseInlineTaglet {
 
-    private static final String NAME = "literal";
+  private static final String NAME = "literal";
 
-    public static void register(Map<String, Taglet> map) {
-        map.remove(NAME);
-        map.put(NAME, new LiteralTaglet());
-    }
+  public static void register(Map<String, Taglet> map) {
+    map.remove(NAME);
+    map.put(NAME, new LiteralTaglet());
+  }
 
-    public String getName() {
-        return NAME;
-    }
+  public String getName() {
+    return NAME;
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Content getTagletOutput(Tag tag, TagletWriter writer) {
-        return writer.literalTagOutput(tag);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public Content getTagletOutput(Tag tag, TagletWriter writer) {
+    return writer.literalTagOutput(tag);
+  }
 }

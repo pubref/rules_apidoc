@@ -86,7 +86,6 @@ def _mk_attrs():
             single_file = True,
         ),
         "doclet_deps": attr.label_list(
-            default = [Label("//src/com/inxar/doclet1")],
             providers = ["java"],
         ),
         "taglet_deps": attr.label_list(

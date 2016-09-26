@@ -39,57 +39,57 @@ package com.sun.tools.doclets.internal.toolkit.taglets;
  */
 public abstract class BaseExecutableMemberTaglet extends BaseTaglet {
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in field documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in field documentation and false
-     * otherwise.
-     */
-    public boolean inField() {
-        return false;
-    }
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in field documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in field documentation and false
+   * otherwise.
+   */
+  public boolean inField() {
+    return false;
+  }
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in overview documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in overview documentation and false
-     * otherwise.
-     */
-    public boolean inOverview() {
-        return false;
-    }
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in overview documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in overview documentation and false
+   * otherwise.
+   */
+  public boolean inOverview() {
+    return false;
+  }
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in package documentation.
-     * @return true if this <code>Taglet</code>
-     * is used in package documentation and false
-     * otherwise.
-     */
-    public boolean inPackage() {
-        return false;
-    }
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in package documentation.
+   * @return true if this <code>Taglet</code>
+   * is used in package documentation and false
+   * otherwise.
+   */
+  public boolean inPackage() {
+    return false;
+  }
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is used in type documentation (classes or interfaces).
-     * @return true if this <code>Taglet</code>
-     * is used in type documentation and false
-     * otherwise.
-     */
-    public boolean inType() {
-        return false;
-    }
+  /**
+   * Return true if this <code>Taglet</code>
+   * is used in type documentation (classes or interfaces).
+   * @return true if this <code>Taglet</code>
+   * is used in type documentation and false
+   * otherwise.
+   */
+  public boolean inType() {
+    return false;
+  }
 
-    /**
-     * Return true if this <code>Taglet</code>
-     * is an inline tag.
-     * @return true if this <code>Taglet</code>
-     * is an inline tag and false otherwise.
-     */
-    public boolean isInlineTag() {
-        return false;
-    }
+  /**
+   * Return true if this <code>Taglet</code>
+   * is an inline tag.
+   * @return true if this <code>Taglet</code>
+   * is an inline tag and false otherwise.
+   */
+  public boolean isInlineTag() {
+    return false;
+  }
 }
