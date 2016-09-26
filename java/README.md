@@ -63,7 +63,6 @@ javadoc(
     taglet_deps = [":bazel"],
 
     overview = "overview.html",
-    quiet = True,
 )
 ```
 
@@ -105,7 +104,6 @@ javadoc(
 
     doclet = "com.sun.tools.doclets.standard.Standard",
     doclet_deps = [":doclets"],
-    quiet = True,
 )
 ```
 

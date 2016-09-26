@@ -24,8 +24,6 @@ BOOL_ATTRS = [
     "keywords",
 ]
 
-#default = "com.inxar.doclet1.standard.Standard",
-
 STRING_ATTRS = [
     "doclet",
     "tagletpath",
@@ -214,9 +212,8 @@ def _javadoc_impl(ctx):
     javadoc_cmd = " ".join(args)
     if not ctx.attr.quiet:
         print("javadoc: %s" % "\n".join(args))
-    cmds.append(javadoc_cmd)
 
-    #print("cmd: %s" % " && ".join(cmds))
+    cmds.append(javadoc_cmd)
 
     ctx.action(
         progress_message = "JavaDoc",

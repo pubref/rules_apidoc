@@ -30,7 +30,6 @@ javadoc(
         "srcs",
     ],
     overview = "overview.html",
-    quiet = True,
     taglet = [
         "org.pubref.rules_apidoc.taglets.BazelTaglet",
     ],
