@@ -5,7 +5,7 @@ First, load `rules_apidoc` in your `WORKSPACE`:
 ```python
 git_repository(
     name = "org_pubref_rules_apidoc",
-    tag = "v0.1.0",
+    tag = "v0.1.1",
     remote = "https://github.com/pubref/rules_apidoc.git",
 )
 ```
