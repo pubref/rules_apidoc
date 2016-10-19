@@ -78,6 +78,7 @@ def _mk_attrs():
             default = Label("@local_jdk//:java"),
             single_file = True,
             executable = True,
+            cfg = "host",
         ),
         "tools_jar": attr.label(
             default = Label("//java:tools_jar"),

@@ -25,11 +25,11 @@ javadoc(
         "com.sun.tools.doclets.internal.toolkit.taglets",
         "com.sun.tools.doclets.internal.toolkit.util",
     ],
+    quiet = False,
     sourcepaths = [
         "java/",
     ],
     deps = [
         "doclets",
     ],
-    quiet = False,
 )
