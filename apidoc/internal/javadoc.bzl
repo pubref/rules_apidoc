@@ -74,10 +74,10 @@ def _mk_attrs():
     attrs = {
         "sourcepaths": attr.string_list(mandatory = False),
         "groups": attr.string_dict(),
-        "java_tool": attr.label(
-            default = Label("@local_jdk//:java"),
+        "javadoc_tool": attr.label(
+            default = Label("@local_jdk//:bin/javadoc"),
             single_file = True,
-            executable = True,
+            allow_files = True,
             cfg = "host",
         ),
         "tools_jar": attr.label(
@@ -132,12 +132,6 @@ def _get_java_dep_jars(deps):
     return jars
 
 
-def _get_javadoc_tool(java_tool):
-    javadoc = java_tool.dirname + "/javadoc"
-    if java_tool.basename.endswith(".exe"):
-        javadoc += ".exe"
-    return javadoc
-
 
 def _get_output_index_html(ctx, outdir):
     filename = "index.html"
@@ -155,8 +149,7 @@ def _javadoc_impl(ctx):
     #
     # Preparation of inputs and dependencies.
     #
-    java = ctx.executable.java_tool
-    javadoc = _get_javadoc_tool(java)
+    javadoc = ctx.file.javadoc_tool
     jars = _get_java_dep_jars(ctx.attr.deps)
     jars.append(ctx.file.tools_jar)
     doclet_jars = _get_java_dep_jars(ctx.attr.doclet_deps)
@@ -164,7 +157,7 @@ def _javadoc_impl(ctx):
     srcfiles = ctx.files.srcs
     index_html = _get_output_index_html(ctx, ctx.attr.outdir)
     all_jars = jars + doclet_jars + taglet_jars
-    inputs = [java] + all_jars + srcfiles
+    inputs = [javadoc] + all_jars + srcfiles
 
     #
     # Command generation.
@@ -173,7 +166,7 @@ def _javadoc_impl(ctx):
     if ctx.attr.outdir:
         cmds += ["mkdir -p %s" % index_html.dirname]
 
-    args = [javadoc]
+    args = [javadoc.path]
     args += ["-d", index_html.dirname]
     args += ["-classpath", _pathlist(jars)]
     if doclet_jars: args += ["-docletpath", _pathlist(doclet_jars)]
@@ -224,7 +217,7 @@ def _javadoc_impl(ctx):
     )
 
     return struct(
-        files = set([index_html]),
+        files = depset([index_html]),
     )
 
 javadoc = rule(
